@@ -1,0 +1,33 @@
+<div class="card border h-100 border-liht m-2">
+    <div class="card-body">
+        <div class="card-title fw-bolder">Personal Informations</div>
+        <p class="card-text "><strong>Name: </strong>{{ user.FName }} {{ user.LName }}</p>
+        <p class="card-text "><strong>Birthdate: </strong>{{ user.Birthday|date }}</p>
+        <p class="card-text "><strong>Email: </strong>{{ user.Email }}</p>
+        <p class="card-text "><strong>Phone number: </strong>{{ user.Phone }}</p>
+        <p class="card-text "><strong>Adress: </strong>{{ user.Adress }}</p>
+        <p class="card-text "><strong>Study
+                Level: </strong> {% if user.StudyLevel %} {{ user.StudyLevel.Name }} {% endif %} </p>
+
+        {% if user.recruitmentSession.depChoiceMaxNbre > 0 %}
+            <p class="card-text "><strong>Chosen Departments: </strong></p>
+            <ul>
+                {% for department in user.departments %}
+                    <li>{{ department.name }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <p class="card-text "><strong>Selected Department: </strong></p>
+        {% if user.result.DepartmentChosen %}
+            <ul>
+                <li>  {{ user.result.DepartmentChosen.name }}</li>
+            </ul>
+        {% else %}
+            -
+        {% endif %}
+
+
+    </div>
+</div>
+

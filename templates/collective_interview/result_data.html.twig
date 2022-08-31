@@ -1,0 +1,87 @@
+{% if user.result is not null %}
+    {% if user.result.CollectiveInterviews is not null %}
+        {% if user.result.CollectiveInterviews == true %}
+            <span id="status_popup" class="badge badge rounded-pill d-block p-2 badge-soft-success">Accepted<span
+                        class="ms-1 fas fa-check" data-fa-transform="shrink-2"></span></span>
+        {% elseif user.result.CollectiveInterviews == false %}
+            <span id="status_popup" class="badge badge rounded-pill d-block p-2 badge-soft-danger">Refused<span
+                        class="ms-1  far fa-window-close" data-fa-transform="shrink-2"></span></span>
+        {% endif %}
+    {% else %}
+        <span id="status_popup" class="badge badge rounded-pill d-block p-2 badge-soft-info">Pending<span
+                    class="ms-1 far fa-clock" data-fa-transform="shrink-2"></span></span>
+    {% endif %}
+{% else %}
+    <span id="status_popup" class="badge badge rounded-pill d-block p-2 badge-soft-info">Pending<span
+                class="ms-1  far fa-clock" data-fa-transform="shrink-2"></span></span>
+{% endif %}
+<div class="card border h-100 border-liht m-2">
+    <div class="card-body">
+        <div class="card-title fw-bolder">Personal Informations</div>
+        <p class="card-text "><strong>Name: </strong>{{ user.FName }} {{ user.LName }}</p>
+        <p class="card-text "><strong>Birthdate: </strong>{{ user.Birthday|date }}</p>
+        <p class="card-text "><strong>Email: </strong>{{ user.Email }}</p>
+        <p class="card-text "><strong>Phone number: </strong>{{ user.Phone }}</p>
+        <p class="card-text "><strong>Adress: </strong>{{ user.Adress }}</p>
+        <p class="card-text "><strong>Study
+                Level: </strong> {% if user.StudyLevel %} {{ user.StudyLevel.Name }} {% endif %} </p>
+        {% if user.recruitmentSession.depChoiceMaxNbre > 0 %}
+            <p class="card-text "><strong>Chosen Departments: </strong></p>
+            <ul>
+                {% for department in user.departments %}
+                    <li>{{ department.name }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+
+    </div>
+</div>
+{% if status == 'dontHaveValues' %}
+    <div class="card mb-3">
+        <div class="card-body">
+            <div class="row flex-between-center">
+                <div class="col-md text-center">
+                    <h5 class="mb-2 mb-md-0">Candidate does not have evaluation sheet filled.</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+{% else %}
+    {% for recruiter in responses %}
+        <div class="card border h-100 border-light m-2">
+            <div class="card-body row">
+                <div class="card-title text-info ">{{ recruiter[0]["recruiter"] }}</div>
+                {% for response in recruiter %}
+                    {% if "decision" in response|keys %}
+                        <div class="card-title ">Remarks</div>
+                        <p class="card-text">{{ response["remark"] }}</p>
+                        <div class="card-title ">Decision</div>
+                        <p class="card-text">{{ response["decision"] }}</p>
+                    {% else %}
+                        <div class='row'>
+                            <div class="card-text col ">{{ response["criterion"] }}</div>
+                            <p class="card-text col-auto">{{ response["result"] }}/10</p>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+    <div class="card border h-100 border-danger m-2">
+        <div class="card-body row">
+            <div class="card-title  text-danger col ">Average</div>
+            <p class="card-text text-danger col-auto">{{ average }}/10</p>
+        </div>
+    </div>
+{% endif %}
+<div class="result_popup mb-4">
+    {% if (user.recruitmentSession.collectiveInterviewsSelectionEnd > date()) and (user.collectiveInterview.end < date()) %}
+            <button class="btn btn-sm  btn-falcon-success btn-sm float-end m-1 {% if user.result is not null %}{% if user.result.collectiveInterviews is not null %}{% if user.result.collectiveInterviews == true %} disabled {% endif %}{% endif %}{% endif %} "
+                    data-value="accept" data-user-id="{{ user.Id }}">Accept
+            </button>
+            <button class="btn btn-sm  btn-falcon-danger btn-sm float-end m-1 {% if user.result is not null %}{% if user.result.collectiveInterviews is not null %}{% if user.result.collectiveInterviews == false %} disabled {% endif %}{% endif %}{% endif %} "
+                    data-value="refuse" data-user-id="{{ user.Id }}">Refuse
+            </button>
+    {% endif %}
+</div>

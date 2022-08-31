@@ -1,0 +1,153 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Pre-Registration Result{% endblock %}
+
+{% block stylesheets %}
+    {{ encore_entry_link_tags('preRegistrationSelection') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('preRegistrationSelection') }}
+{% endblock %}
+
+
+{% block body %}
+    <main class="main" id="top">
+        <div class="container" data-layout="container">
+            {{ include('_sidebar.html.twig') }}
+
+            <div class="content">
+                {{ include('_navbar.html.twig') }}
+
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <div class="row flex-between-end">
+                            <div class="col-auto align-self-center">
+                                <h5 class="mb-0" data-anchor="data-anchor"> Pre-Registration Result</h5>
+                            </div>
+                            <div class="col-auto ms-auto">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body bg-light">
+                        <div class="table-responsive scrollbar">
+                            <table class="table table-sm table-striped fs--1 mb-0 overflow-hidden">
+                                <thead class="bg-200 text-900">
+                                <tr>
+                                    <th></th>
+                                    <th>Name</th>
+                                    <th>Birthdate</th>
+                                    <th>Field of study</th>
+                                    <th>Status</th>
+                                    <th>Email</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for user in users %}
+                                    <tr class="align-middle" role="button">
+                                        <td>
+                                            <div class="avatar avatar-xl">
+                                                <img class="rounded-circle" src="{{ asset(user.imgPath) }}" alt=""/>
+                                            </div>
+                                        </td>
+                                        <td class="text-nowrap" data-bs-toggle="modal" id="{{ user.Id }}"
+                                            data-bs-target="#result-modal">
+                                            <div class="d-flex align-items-center">
+                                                <div class="ms-2">{{ user.FName }} {{ user.LName }}</div>
+                                            </div>
+                                        </td>
+                                        <td class="text-nowrap" data-bs-toggle="modal" id="{{ user.Id }}"
+                                            data-bs-target="#result-modal">{{ user.Birthday|date("Y M d") }}</td>
+                                        <td class="text-nowrap " data-bs-toggle="modal" id="{{ user.Id }}"
+                                            data-bs-target="#result-modal">{% if user.StudyLevel %} {{ user.StudyLevel.Name }} {% endif %} </td>
+                                        <td data-bs-toggle="modal" id="{{ user.Id }}" data-bs-target="#result-modal">
+                                            {% if user.result is not null %}
+                                                {% if user.result.preRegistration is not null %}
+                                                    {% if user.result.preRegistration == true %}
+                                                        <span id="{{ user.Id }}"
+                                                              class="badge badge rounded-pill d-block p-2 badge-soft-success status">Accepted<span
+                                                                    class="ms-1 fas fa-check"
+                                                                    data-fa-transform="shrink-2"></span></span>
+                                                    {% elseif user.result.preRegistration == false %}
+                                                        <span id="{{ user.Id }}"
+                                                              class="badge badge rounded-pill d-block p-2 badge-soft-danger status">Refused<span
+                                                                    class="ms-1  fas fa-close"
+                                                                    data-fa-transform="shrink-2"></span></span>
+                                                    {% endif %}
+                                                {% else %}
+                                                    <span id="{{ user.Id }}"
+                                                          class="badge badge rounded-pill d-block p-2 badge-soft-info status">Pending<span
+                                                                class="ms-1 far fa-clock"
+                                                                data-fa-transform="shrink-2"></span></span>
+                                                {% endif %}
+                                            {% else %}
+                                                <span id="{{ user.Id }}"
+                                                      class="badge badge rounded-pill d-block p-2 badge-soft-info status">Pending<span
+                                                            class="ms-1  far fa-clock"
+                                                            data-fa-transform="shrink-2"></span></span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if (user.result) and (user.result.preRegistrationEmail is same as(true)) %}
+                                                <span id="{{ user.Id }}"
+                                                      class="badge badge rounded-pill d-block p-2 badge-soft-success email-status">Email sent<span
+                                                            class="ms-1 fas fa-check"
+                                                            data-fa-transform="shrink-2"></span></span>
+                                            {% else %}
+                                                <span id="{{ user.Id }}"
+                                                      class="badge badge rounded-pill d-block p-2 badge-soft-danger email-status">Email not sent<span
+                                                            class="ms-1 fas fa-close"
+                                                            data-fa-transform="shrink-2"></span></span>
+                                            {% endif %}
+                                        </td>
+                                        <td class="result">
+                                            <button class="btn btn-sm  btn-falcon-info btn-sm float-end m-1"
+                                                    data-value="mail" data-user-id="{{ user.Id }}">Send Email
+                                            </button>
+                                            {% if user.recruitmentSession.preRegistrationSelectionEnd > date() %}
+                                                {% if user.responses is not empty %}
+                                                    <button class="btn btn-sm  btn-falcon-success btn-sm float-end m-1 {% if user.result is not null %}{% if user.result.preRegistration is not null %}{% if user.result.preRegistration == true %} disabled {% endif %}{% endif %}{% endif %} "
+                                                            data-value="accept" data-user-id="{{ user.Id }}">Accept
+                                                    </button>
+                                                {% endif %}
+                                                {% if ((user.responses is empty) and (user.recruitmentSession.registrationEnd < date() )) or (user.responses is not empty) %}
+                                                    <button class="btn btn-sm  btn-falcon-danger btn-sm float-end m-1 {% if user.result is not null %}{% if user.result.preRegistration is not null %}{% if user.result.preRegistration == false %} disabled {% endif %}{% endif %}{% endif %} "
+                                                            data-value="refuse" data-user-id="{{ user.Id }}">Refuse
+                                                    </button>
+                                                {% endif %}
+                                            {% endif %}
+
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="result-modal-label-1"
+                         aria-hidden="true" id="result-modal">
+                        <div class="modal-dialog modal-lg mt-6" role="document">
+                            <div class="modal-content border-0">
+                                <div class="position-absolute top-0 end-0 mt-3 me-3 z-index-1">
+                                    <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base"
+                                            data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body p-0">
+                                    <div class="bg-light rounded-top-lg py-3 ps-4 pe-6">
+                                        <h4 class="mb-1" id="kanban-modal-label-1">Answers</h4>
+                                    </div>
+                                    <div class="p-4 kanban-items-container scrollbar" id="result_body">
+                                        <div class="justify-self-center spinner-border loading" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

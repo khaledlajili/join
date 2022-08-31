@@ -1,0 +1,13 @@
+<tr class="btn-reveal-trigger">
+    <td class="py-2 align-middle white-space-nowrap">
+        <img src="{{ asset(recruiter.imgPath) }}" class="rounded-circle w-75"
+             alt="profile image"/>
+    </td>
+    <td class="py-2 align-middle white-space-nowrap">{{ recruiter.email }}</td>
+    <td class="py-2 align-middle white-space-nowrap">{{ recruiter.fName }} {{ recruiter.lName }}</td>
+    <td class="py-2 align-middle white-space-nowrap">{{ recruiter.phone }}</td>
+    <td class="py-2 align-middle white-space-nowrap">{{ recruiter.adress }}</td>
+    <td class="py-2 align-middle white-space-nowrap text-end">
+        <a href="{{ path('app_recruiter_remove',{ recruiter : recruiter.id }) }}" class="btn btn-falcon-danger btn-sm"><span class="fas fa-trash" data-fa-transform="shrink-3 down-2"></span></a>
+    </td>
+</tr>

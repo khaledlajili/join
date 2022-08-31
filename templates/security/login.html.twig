@@ -1,0 +1,60 @@
+{% extends 'base_simple.html.twig' %}
+
+{% block title %}Login{% endblock %}
+
+{% block body %}
+    <div class="card">
+        <div class="card-body p-4 p-sm-5">
+
+
+            <div class="row flex-between-center mb-2">
+                <div class="col-auto">
+                    <h5>Log in</h5>
+                </div>
+            </div>
+            {% if error %}
+                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            {% endif %}
+
+            {% for flash in app.flashes('error') %}
+                <div class="alert p-2 alert-danger" role="alert">{{ flash }}</div>
+            {% endfor %}
+
+            {% for flash in app.flashes('success') %}
+                <div class="alert p-2 alert-success" role="alert">{{ flash }}</div>
+            {% endfor %}
+
+            {% for flash in app.flashes('info') %}
+                <div class="alert p-2 alert-info" role="alert">{{ flash }}</div>
+            {% endfor %}
+
+            <form method="post">
+                <div class="mb-3">
+                    <input class="form-control" type="email" value="{{ last_username }}" name="email"
+                           placeholder="Email address" required/>
+                </div>
+                <div class="mb-3">
+                    <input class="form-control" name="password" type="password" placeholder="Password" required/>
+                </div>
+                <div class="row flex-between-center">
+                    <div class="col-auto">
+                        <div class="form-check mb-0">
+                            <input class="form-check-input" type="checkbox" id="basic-checkbox" name="_remember_me"
+                                   checked="checked"/>
+                            <label class="form-check-label mb-0" for="basic-checkbox">Remember me</label>
+                        </div>
+                    </div>
+                    <div class="col-auto"><a class="fs--1" href="{{ path('app_forgot_password_request') }}">Forgot
+                            Password?</a></div>
+                </div>
+                <input type="hidden" name="_csrf_token"
+                       value="{{ csrf_token('authenticate') }}"
+                >
+                <div class="mb-3">
+                    <button class="btn btn-primary btn-sm w-100 d-block mt-3" type="submit" name="submit">Log in
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock body %}

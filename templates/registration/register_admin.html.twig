@@ -1,0 +1,27 @@
+{% extends 'base_simple.html.twig' %}
+
+{% block title %}Register Admin{% endblock %}
+
+{% block body %}
+    <div class="card">
+        <div class="card-body p-4 p-sm-5">
+                <div class="row flex-between-center mb-2">
+                    <div class="col-auto">
+                        <h5>Register Admin</h5>
+                    </div>
+                </div>
+                {% for flash in app.flashes('error') %}
+                    <div class="alert alert-danger errors">{{ form_errors(adminRegistrationForm) }}</div>
+                {% endfor %}
+                {% for flash in app.flashes('errorDep') %}
+                    <div class="alert alert-danger errors">{{ flash }}</div>
+                {% endfor %}
+                {{ form_start(adminRegistrationForm) }}
+                {{ form_widget(adminRegistrationForm) }}
+                <div class="mb-3">
+                    <button class="btn btn-primary btn-sm d-block w-100 mt-3" type="submit" name="submit">Register</button>
+                </div>
+                {{ form_end(adminRegistrationForm) }}
+        </div>
+    </div>
+{% endblock body %}

@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Collective Interview Evaluation Grid
+{% endblock %}
+
+{% block stylesheets %}
+    {{ encore_entry_link_tags('app') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('app') }}
+{% endblock %}
+
+{% block body %}
+    <main class="main" id="top">
+        <div class="container" data-layout="container">
+            {{ include('_sidebar.html.twig') }}
+            <div class="content">
+                {{ include('_navbar.html.twig') }}
+                {% if collectiveInterview.start < date() %}
+                <div class="row g-0">
+                    <div>
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                <h5 class="mb-0">
+                                    Collective Interview Evaluation Grid
+                                </h5>
+                            </div>
+                            <div class="card-body bg-light">
+                                <div class="row gx-2">
+                                    {{ form(collectiveForm) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="row flex-between-center">
+                                <div class="col-md text-center">
+                                    <h5 class="mb-2 mb-md-0">You can evaluate this candidate only after the interview</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </main>
+{% endblock %}

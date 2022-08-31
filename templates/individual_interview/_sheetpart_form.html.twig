@@ -1,0 +1,53 @@
+{% import _self as formMacros %}
+{% macro printCriterionRow(sheetPartCriterion) %}
+    <div class="input-group option">
+        {{ form_widget(sheetPartCriterion) }}
+        <a class="m-1 remove-option-button text-danger cursor-pointer" style="z-index: 0">
+            <span class="fa-solid fa-xmark" data-fa-transform="shrink-3 down-2"></span>
+        </a>
+    </div>
+    {{ form_errors(sheetPartCriterion) }}
+{% endmacro %}
+
+
+{{ form_start(SheetPartForm,{'attr' : {'class' : 'add-card-form add-sheet-part-form'}}) }}
+
+{{ form_row(SheetPartForm.name) }}
+{{ form_row(SheetPartForm.coefficient) }}
+<ul>
+    {% for flash in app.flashes('error') %}
+        <li class="text-danger mb-3">{{ flash }}</li>
+    {% endfor %}
+</ul>
+
+    <button class="btn btn-falcon-default btn-sm add-another-collection-widget mb-3" type="button"
+            data-list-selector="#sheet-part-criteria-list"><span class="fas fa-plus"
+                                                           data-fa-transform="shrink-3 down-2"></span><span
+                class="d-none d-sm-inline-block ms-1">Add criterion</span></button>
+    <ul id="sheet-part-criteria-list" style="list-style-type: none;"
+        data-prototype="{{ formMacros.printCriterionRow(SheetPartForm.interviewsEvaluationCriteria.vars.prototype)|e }}"
+        data-widget-tags="{{ '<li></li>'|e }}"
+        data-widget-counter="{{ SheetPartForm.interviewsEvaluationCriteria|length }}">
+        {% for interviewsEvaluationCriterion in SheetPartForm.interviewsEvaluationCriteria %}
+            {{ formMacros.printCriterionRow(interviewsEvaluationCriterion) }}
+        {% endfor %}
+    </ul>
+
+{% if recruitmentSession.depChoiceMaxNbre %}
+    {{ form_row(SheetPartForm.departments) }}
+{% endif %}
+
+<div class="row gx-2 mt-2">
+    <div class="col">
+        <button class="btn btn-primary btn-sm d-block w-100" type="submit"><span class="fas fa-plus"
+                                                                                 data-fa-transform="shrink-3 down-2"></span>Add
+        </button>
+    </div>
+    <div class="col">
+        <button class="btn btn-outline-secondary btn-sm d-block w-100 border-400"
+                type="button" id="cancel_button_add" data-btn-form="hide">Cancel
+        </button>
+    </div>
+</div>
+
+{{ form_end(SheetPartForm) }}

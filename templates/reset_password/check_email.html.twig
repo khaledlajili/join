@@ -1,0 +1,27 @@
+{% extends 'base_simple.html.twig' %}
+
+{% block title %}Password Reset Email Sent{% endblock %}
+
+{% block body %}
+    <div class="card">
+        <div class="card-body p-4 p-sm-5">
+            <div class="text-center">
+                <h4 class="mb-2">Please check your email!</h4>
+                <p>If an account matching your email exists, then an email was just sent that contains a
+                    link that you can use to reset your password.</p>
+                <p>
+                    This link will expire in <strong>1 hour</strong>.</p>
+                <p>
+                    If you don't receive an email please check your spam folder.
+                </p>
+                <div class="position-relative mt-4">
+                    <hr class="bg-300">
+                    <div class="divider-content-center">OR</div>
+                </div>
+                <a class="btn btn-falcon-default btn-sm mt-3" href="{{ path('app_forgot_password_request') }}">Try
+                    again <span class="fas fa-chevron-right me-1"
+                                data-fa-transform="shrink-4 down-1"></span></a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

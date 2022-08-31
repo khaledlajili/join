@@ -1,0 +1,102 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Interviews Evaluation Grid{% endblock %}
+
+{% block stylesheets %}
+    {{ encore_entry_link_tags('interviewEvaluation') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('interviewEvaluation') }}
+{% endblock %}
+
+{% block body %}
+    <main class="main" id="top">
+        <div class="container" data-layout="container">
+
+            {{ include('_sidebar.html.twig') }}
+            <div class="content">
+                {{ include('_navbar.html.twig') }}
+                {% if recruitmentSession %}
+                    {% if date(recruitmentSession.interviewsStart) < date() %}
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="row flex-between-center">
+                                    <div class="col-md text-center">
+                                        <h5 class="mb-2 mb-md-0">You no longer can edit the interviews evaluation
+                                            grid.</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="kanban-container scrollbar  me-n3">
+                            <div class="kanban-column mt-3 " style="width:96%;">
+                                <div class="kanban-column-header">
+                                    <h5 class="fs-0 mb-0"> Individual Interviews Sheet Parts <span
+                                                id='counter' class="text-500 ">({{ sheetParts|length }})</span></h5>
+                                </div>
+                                <div>
+                                    {% for flash in app.flashes('error') %}
+                                        <div class="alert alert-danger errors">{{ flash }}</div>
+                                    {% endfor %}
+
+                                    <div class="sheet-part-item-container scrollbar">
+                                        {% for sheetPart in sheetParts %}
+                                            {{ include('individual_interview/_sheetpart_item.html.twig') }}
+                                        {% endfor %}
+                                    </div>
+                                    <div class="add-sheet-part-form-container">
+                                        {{ include('individual_interview/_sheetpart_form.html.twig') }}
+                                    </div>
+                                </div>
+
+                                <div class="kanban-column-footer mt-2">
+                                    <button class="btn btn-link btn-sm d-block w-100 btn-add-card text-decoration-none text-600"
+                                            type="button"><span class="fas fa-plus me-2"></span>Add another sheet part
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                    {% endif %}
+                {% else %}
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="row flex-between-center">
+                                <div class="col-md text-center">
+                                    <h5 class="mb-2 mb-md-0">There is no current recruitment session</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
+            </div>
+            <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="kanban-modal-label-1"
+                 aria-hidden="true" id="edit-sheet-part-modal">
+                <div class="modal-dialog modal-lg mt-6" role="document">
+                    <div class="modal-content border-0">
+                        <div class="position-absolute top-0 end-0 mt-3 me-3 z-index-1">
+                            <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base"
+                                    data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body p-0">
+                            <div class="bg-light rounded-top-lg py-3 ps-4 pe-6">
+                                <h4 class="mb-1" id="kanban-modal-label-1">Edit Sheet Part</h4>
+                            </div>
+                            <div class="p-4">
+                                <div class="row justify-content-center">
+                                    <div class="col-lg-9 edit-sheet-part-modal-body">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

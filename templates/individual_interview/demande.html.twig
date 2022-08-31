@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cancellation demand{% endblock %}
+
+{% block stylesheets %}
+    {{ encore_entry_link_tags('app') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('app') }}
+{% endblock %}
+
+{% block body %}
+    <main class="main" id="top">
+        <div class="container" data-layout="container">
+
+            {{ include('_sidebar.html.twig') }}
+
+            <div class="content">
+
+                {{ include('_navbar.html.twig') }}
+
+
+                <div class="row g-0">
+                    <div>
+                        <div class="card mb-3">
+                            <div class="card-header">
+
+                                <h5 class="mb-0">Please send us the reason of cancellation</h5>
+                            </div>
+                            <div class="card-body bg-light">
+                                <div class="row gx-2">
+                                    {{ form(form,{'action': path('app_individual_interview_submit_demande') }) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 ps-lg-2">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

@@ -1,0 +1,91 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block stylesheets %}
+    {{ encore_entry_link_tags('app') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('app') }}
+{% endblock %}
+
+
+{% block body %}
+    <main class="main" id="top">
+        <div class="container" data-layout="container">
+
+            {{ include('_sidebar.html.twig') }}
+
+            <div class="content">
+                {{ include('_navbar.html.twig') }}
+                <div class="card mb-3">
+
+                    <div class="card-header">
+                        {% for flash in app.flashes('error') %}
+                            <div class="alert p-2 alert-danger" role="alert">{{ flash }}</div>
+                        {% endfor %}
+                        {% for flash in app.flashes('success') %}
+                            <div class="alert p-2 alert-success" role="alert">{{ flash }}</div>
+                        {% endfor %}
+                        <div class="row flex-between-end">
+                            <div class="col-auto align-self-center">
+                                <h5 class="mb-0" data-anchor="data-anchor"> Recruitment Sessions </h5>
+                            </div>
+                            <div class="col-auto ms-auto">
+                                {% if not currentRecruitmentSession %}
+                                    <a class="btn btn-falcon-default btn-sm"
+                                       href="{{ path('app_recruitment_session') }}"><span
+                                                class="fas fa-add"
+                                                data-fa-transform="shrink-3 down-2"></span> New</a>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="card-body bg-light">
+                        <div class="tab-content">
+                            <div class="tab-pane preview-tab-pane active">
+                                <div class="table-responsive scrollbar">
+                                    <table class="table table-sm table-striped fs--1 mb-0 overflow-hidden">
+                                        <thead class="bg-200 text-900">
+                                        <tr>
+                                            <th scope="col">Name</th>
+                                            <th scope="col">Start date</th>
+                                            <th scope="col"></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for recruitmentSession in recruitmentSessions %}
+                                            <tr class="align-middle">
+                                                <td class="text-nowrap">{{ recruitmentSession.name }}</td>
+                                                <td class="text-nowrap">{% if recruitmentSession.start %}{{ recruitmentSession.start|date("M d Y H:m") }}{% else %}-{% endif %}</td>
+                                                <td class="text-nowrap">
+                                                    {% if recruitmentSession.current %}
+                                                        <a class="btn btn-falcon-default btn-sm"
+                                                           href="{{ path('app_recruitment_session') }}"><span
+                                                                    class="fas fa-edit"
+                                                                    data-fa-transform="shrink-3 down-2"></span> Edit</a>
+                                                    {% else %}
+                                                        <a class="btn btn-falcon-default btn-sm"
+                                                           href="{{ path('app_statistics',{recruitmentSession : recruitmentSession.id}) }}"><span
+                                                                    class="fas fa-chart-bar"
+                                                                    data-fa-transform="shrink-3 down-2"></span>
+                                                            Statistics</a>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+{% endblock %}

@@ -1,0 +1,17 @@
+<form name="technical_test_result" method="post" enctype="multipart/form-data">
+    <div class="mb-3 row">
+        <label class="col-form-label required"
+               for="technical_test_result_file">{{ technicalTest.department.name }}
+        </label>
+        <div class="">
+            <input type="file" id="technical_test_result_file"
+                   name="technical_test_result[file]"
+                   required="required" class="form-control">
+            <button class="btn btn-falcon-default btn-sm d-block mt-2" type="submit">
+                <span class="fas fa-upload" data-fa-transform="shrink-3 down-2"></span>
+                Submit
+            </button>
+        </div>
+
+    </div>
+</form>

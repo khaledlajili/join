@@ -1,0 +1,39 @@
+<div class="kanban-item" id="{{ sheetPart.id }}">
+    <div class="card kanban-item-card hover-actions-trigger">
+        <div class="card-body">
+            <div class="position-relative">
+                <div class="dropdown font-sans-serif">
+                    <a
+                            href="{{ path('app_interview_evaluation_grid_remove_sheet', { sheetPart : sheetPart.id }) }}"
+                            class="btn btn-sm btn-falcon-danger kanban-item-dropdown-btn hover-actions"
+                            type="button" data-boundary="viewport"
+                            aria-haspopup="true"
+                            aria-expanded="false"><span class="fas fa-trash"></span>
+                    </a>
+
+                </div>
+            </div>
+            <p class="mb-0 fw-medium font-sans-serif stretched-link"
+               data-sheet-part-id="{{ sheetPart.Id }}">{{ sheetPart.name }}</p>
+            {% if sheetPart.Departments.first %}
+                <div class="mb-2">
+                    {% for department in sheetPart.Departments %}
+                        <span class="badge py-1 me-1 mb-1 badge-soft-primary">{{ department.name }}</span>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {% if sheetPart.interviewsEvaluationCriteria.first %}
+                <div class="container">
+                    <label>Criteria :</label>
+                    <ul><pre>
+                                                    </pre>
+                        {% for criterion in sheetPart.interviewsEvaluationCriteria %}
+                            <li>{{ criterion.criterion }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+            <span class="badge py-1 me-1 mb-1 badge-soft-danger">{{ sheetPart.coefficient }}</span>
+        </div>
+    </div>
+</div>

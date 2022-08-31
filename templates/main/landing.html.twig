@@ -1,0 +1,19 @@
+{% extends 'base_simple.html.twig' %}
+
+{% block title %}Login{% endblock %}
+
+{% block body %}
+    <div class="card">
+        <div class="card-body p-4 p-sm-5">
+            <div class="row flex-between-center mb-2">
+                <div class="col-auto text-center">
+                    <h5>Welcome to Junior Online Integration Network</h5>
+                </div>
+            </div>
+            <div class="mb-3">
+                <a href="{{ path('app_register') }}" class="btn btn-falcon-primary btn-sm d-block mt-3">Register</a>
+                <a href="{{ path('app_login') }}" class="btn btn-falcon-primary btn-sm d-block mt-3">Log in</a>
+            </div>
+        </div>
+    </div>
+{% endblock body %}

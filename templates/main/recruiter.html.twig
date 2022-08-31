@@ -1,0 +1,126 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Recruiter Dashboard{% endblock %}
+
+{% block stylesheets %}
+    {{ encore_entry_link_tags('app') }}
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('app') }}
+{% endblock %}
+
+{% block body %}
+    <main class="main" id="top">
+        <div class="container" data-layout="container">
+
+            {{ include('_sidebar.html.twig') }}
+
+            <div class="content">
+
+                {{ include('_navbar.html.twig') }}
+                {% if ( recruitmentSession is null ) or (recruitmentSession.Start is null) %}
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="row flex-between-center">
+                            <div class="col-md text-center">
+                                <h5 class="mb-2 mb-md-0">there is no current recruitment session.</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+
+                <div class="row g-3 mb-3">
+                    <div class="col-lg-12">
+                        <div class="card h-100">
+                            <div class="bg-holder bg-card"></div>
+                            <div class="card-header z-index-1">
+                                <h5 class="text-primary">Welcome {{ user.fName }}</h5>
+                                <h6 class="text-600">Here's the progress of the recruitment process </h6>
+                            </div>
+                            <div class="card-body z-index-1">
+                                <div class="progress mb-3 rounded-pill" style="height: 6px;">
+                                    <div class="progress-bar bg-progress-gradient rounded-pill" role="progressbar"
+                                         style="width: {{ pourcentage }}%" aria-valuenow="43.72" aria-valuemin="0"
+                                         aria-valuemax="100"></div>
+                                </div>
+                                <p class="mb-0 text-primary">{{ pourcentage }}% completed</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% if ( recruitmentSession is not null ) and (recruitmentSession.collectiveInterview is same as(true)) %}
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header pb-0">
+                                <div class="row">
+                                    <div class="col">
+                                        <h5 class="text-primary fs-0">Collective Interviews</h5>
+                                    </div>
+                                    <div class="col-auto">
+                                        <div class="bg-soft-primary px-3 py-3 rounded-circle text-center"
+                                             style="width:60px;height:60px;">
+                                            <h5 class="text-primary mb-0 d-flex flex-column mt-n1">
+                                                <span>{{ recruitmentSession.CollectiveInterviewsEnd | date("d") }}</span><small
+                                                        class="text-primary fs--2 lh-1">{{ recruitmentSession.getInterviewsEnd | date("M") }}</small>
+
+                                            </h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body d-flex align-items-end">
+                                <div class="row g-3 justify-content-between">
+                                    <div class="col-auto">
+                                        <a href="{{ path('app_collective_interviews') }}"
+                                           class="  btn btn-success w-100 fs--1  m-2 col-sm  "
+                                           type="button">Interviews</a>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header pb-0">
+                                <div class="row">
+                                    <div class="col">
+                                        <h5 class="text-primary fs-0">Interviews</h5>
+                                    </div>
+                                    <div class="col-auto">
+                                        <div class="bg-soft-primary px-3 py-3 rounded-circle text-center"
+                                             style="width:60px;height:60px;">
+                                            <h5 class="text-primary mb-0 d-flex flex-column mt-n1">
+                                                <span>{{ recruitmentSession.getInterviewsEnd | date("d") }}</span><small
+                                                        class="text-primary fs--2 lh-1">{{ recruitmentSession.getInterviewsEnd | date("M") }}</small>
+
+                                            </h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body align-items-end">
+                                <div class="row g-3 justify-content-between">
+                                    <div class="col-6">
+                                        <a href="{{ path('app_individual_interviews_list') }}"
+                                           class="col-sm  btn btn-success w-100 fs--1  m-2 "
+                                           type="button">Interviews</a>
+                                    </div>
+                                    <div class="col-6">
+                                        <a href="{{ path('app_individual_interview_availability') }}"
+                                           class="col-sm btn btn-success w-100 fs--1 m-2 {% if calendarState =='cannotAccessCalendar' %} disabled  {% endif %}"
+                                           type="button">Availibility Calendar</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </main>
+{% endblock %}

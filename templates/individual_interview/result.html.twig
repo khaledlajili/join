@@ -1,0 +1,186 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Individual Interviews Result{% endblock %}
+
+{% block stylesheets %}
+    {{ encore_entry_link_tags('individualSelection') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('individualSelection') }}
+{% endblock %}
+
+
+{% block body %}
+    <main class="main" id="top">
+        <div class="container" data-layout="container">
+            {{ include('_sidebar.html.twig') }}
+            <div class="content">
+                {{ include('_navbar.html.twig') }}
+                <div class="card mb-3">
+                </div>
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <div class="row flex-between-end">
+                            <div class="col-auto align-self-center">
+                                <h5 class="mb-0" data-anchor="data-anchor"> Individual Interviews Result</h5>
+                            </div>
+                            <div class="col-auto ms-auto">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body bg-light">
+                        <div class="table-responsive scrollbar">
+                            <table class="table table-sm table-striped fs--1 mb-0 overflow-hidden">
+                                <thead class="bg-200 text-900">
+                                <tr>
+                                    <th></th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Birthdate</th>
+                                    <th scope="col">Field of study</th>
+                                    <th scope="col">Status</th>
+                                    <th>Email</th>
+                                    <th scope="col">Department</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for user in users %}
+                                    <tr class="align-middle" role="button">
+                                        <td>
+                                            <div class="avatar avatar-xl">
+                                                <img class="rounded-circle" src="{{ asset(user.imgPath) }}" alt=""/>
+                                            </div>
+                                        </td>
+                                        <td class="text-nowrap" data-bs-toggle="modal" id="{{ user.Id }}"
+                                            data-bs-target="#result-modal">
+                                            <div class="d-flex align-items-center">
+                                                <div class="ms-2">{{ user.FName }} {{ user.LName }}</div>
+                                            </div>
+                                        </td>
+                                        <td class="text-nowrap" data-bs-toggle="modal" id="{{ user.Id }}"
+                                            data-bs-target="#result-modal">
+                                            {{ user.Birthday|date("Y M d") }}</td>
+                                        <td class="text-nowrap " data-bs-toggle="modal" id="{{ user.Id }}"
+                                            data-bs-target="#result-modal">
+                                            {% if user.StudyLevel %} {{ user.StudyLevel.Name }} {% endif %} </td>
+                                        <td data-bs-toggle="modal" id="{{ user.Id }}" data-bs-target="#result-modal">
+                                            {% if user.result is not null %}
+                                                {% if user.result.Interview is not null %}
+                                                    {% if user.result.Interview == true %}
+                                                        <span id="{{ user.Id }}"
+                                                              class="badge badge rounded-pill d-block p-2 badge-soft-success status">Accepted<span
+                                                                    class="ms-1 fas fa-check"
+                                                                    data-fa-transform="shrink-2"></span></span>
+                                                    {% elseif user.result.Interview == false %}
+                                                        <span id="{{ user.Id }}"
+                                                              class="badge badge rounded-pill d-block p-2 badge-soft-danger status">Refused<span
+                                                                    class="ms-1  fas fa-close"
+                                                                    data-fa-transform="shrink-2"></span></span>
+                                                    {% endif %}
+                                                {% else %}
+                                                    <span id="{{ user.Id }}"
+                                                          class="badge badge rounded-pill d-block p-2 badge-soft-info status">Pending<span
+                                                                class="ms-1 far fa-clock"
+                                                                data-fa-transform="shrink-2"></span></span>
+                                                {% endif %}
+                                            {% else %}
+                                                <span id="{{ user.Id }}"
+                                                      class="badge badge rounded-pill d-block p-2 badge-soft-info status">Pending<span
+                                                            class="ms-1  far fa-clock"
+                                                            data-fa-transform="shrink-2"></span></span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if (user.result) and (user.result.interviewEmail is same as(true)) %}
+                                                <span id="{{ user.Id }}"
+                                                      class="badge badge rounded-pill d-block p-2 badge-soft-success email-status">Email sent<span
+                                                            class="ms-1 fas fa-check"
+                                                            data-fa-transform="shrink-2"></span></span>
+                                            {% else %}
+                                                <span id="{{ user.Id }}"
+                                                      class="badge badge rounded-pill d-block p-2 badge-soft-danger email-status">Email not sent<span
+                                                            class="ms-1 fas fa-close"
+                                                            data-fa-transform="shrink-2"></span></span>
+                                            {% endif %}
+                                        </td>
+                                        <td class="text-nowrap  " id="{{ user.Id }}">
+                                            {% if (user.recruitmentSession.interviewsSelectionEnd > date()) and ((user.interview) and (user.interview.end < date())) %}
+                                                <select name="dep"
+                                                        class="form-select dep-choice form-select-sm selected-dep-row-{{ user.Id }}">
+                                                    {% for department in departments %}
+                                                        <option
+                                                                value="{{ department.id }}"
+                                                                {% if user.result is not null %}
+                                                                    {% if user.result.DepartmentChosen is not null %}
+                                                                        {% if user.result.DepartmentChosen.id==department.id %}
+                                                                            selected
+                                                                        {% endif %}
+                                                                    {% endif %}
+                                                                {% endif %}
+                                                        >
+                                                            {{ department.name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            {% else %}
+                                                {% for department in departments %}
+                                                    {% if user.result is not null %}
+                                                        {% if user.result.DepartmentChosen is not null %}
+                                                            {% if user.result.DepartmentChosen.id==department.id %}
+                                                                {{ department.name }}
+                                                            {% endif %}
+                                                        {% endif %}
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% endif %}
+                                        </td>
+
+                                        <td class="result">
+                                            <button class="btn btn-sm  btn-falcon-info btn-sm float-end m-1"
+                                                    data-value="mail" data-user-id="{{ user.Id }}">Send Email
+                                            </button>
+                                            {% if (user.recruitmentSession.interviewsSelectionEnd > date()) and ((user.interview) and (user.interview.end < date())) %}
+                                                <button
+                                                        class="btn btn-sm  btn-falcon-success btn-sm float-end m-1 {% if user.result is not null %}{% if user.result.Interview is not null %}{% if user.result.Interview == true %} disabled {% endif %}{% endif %}{% endif %} "
+                                                        data-value="accept" data-user-id="{{ user.Id }}">Accept
+                                                </button>
+                                                <button
+                                                        class="btn btn-sm  btn-falcon-danger btn-sm float-end m-1 {% if user.result  is not null %}{% if user.result.Interview is not null %}{% if user.result.Interview == false %} disabled {% endif %}{% endif %}{% endif %} "
+                                                        data-value="refuse" data-user-id="{{ user.Id }}">Refuse
+                                                </button>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                    <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="result-modal-label-1"
+                         aria-hidden="true" id="result-modal">
+                        <div class="modal-dialog modal-lg mt-6" role="document">
+                            <div class="modal-content border-0">
+                                <div class="position-absolute top-0 end-0 mt-3 me-3 z-index-1">
+                                    <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base"
+                                            data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body p-0">
+                                    <div class="bg-light rounded-top-lg py-3 ps-4 pe-6">
+                                        <h4 class="mb-1" id="kanban-modal-label-1">Evaluation</h4>
+                                    </div>
+                                    <div class="p-4 kanban-items-container scrollbar" id="result_body">
+                                        <div class="justify-self-center spinner-border loading" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

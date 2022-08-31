@@ -1,0 +1,119 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Collective Interviews Grid
+{% endblock %}
+
+{% block stylesheets %}
+    {{ encore_entry_link_tags('collectiveEvaluation') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('collectiveEvaluation') }}
+{% endblock %}
+
+{% block body %}
+    <main class="main" id="top">
+        <div class="container" data-layout="container">
+            {{ include('_sidebar.html.twig') }}
+
+            <div class="content">
+                {{ include('_navbar.html.twig') }}
+
+                {% if recruitmentSession %}
+                    {% if date(recruitmentSession.preRegistrationSelectionEnd) < date() %}
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="row flex-between-center">
+                                    <div class="col-md text-center">
+                                        <h5 class="mb-2 mb-md-0">You no longer can edit the collective interviews
+                                            evaluation grid.</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="mb-3">
+                            <div class="card mb-lg-0">
+                                <div class="card-header">
+                                    <div class="row flex-between-center">
+                                        <div class="col-4 col-sm-auto d-flex align-items-center pe-0">
+                                            <h5 class="fs-0 mb-0 text-nowrap py-2 py-xl-0">
+                                                Collective interviews criteria
+                                            </h5>
+                                        </div>
+                                        <div class="col-8 col-sm-auto ms-auto text-end ps-0">
+                                            <div id="orders-actions">
+                                                <button class="btn btn-falcon-default btn-sm"
+                                                        type="button"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#addDepartmentModal">
+                      <span class="fas fa-plus"
+                            data-fa-transform="shrink-3 down-2">
+
+                      </span><span class="d-none d-sm-inline-block ms-1">
+                        New
+                      </span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body bg-light">
+                                    <div class="table-responsive scrollbar">
+                                        <table class="table table-sm table-striped fs--1 mb-0 overflow-hidden">
+                                            <thead class="bg-200 text-900">
+                                            <tr>
+                                                <th class="sort pe-1 align-middle white-space-nowrap">
+                                                    Criterion
+                                                </th>
+                                                <th class="no-sort"></th>
+                                            </tr>
+                                            </thead>
+                                            <tbody class="list" id="table-criteria-body">
+                                            {% for collectiveInterviewEvaluationCriterion in criterions %}
+                                                {{ include('collective_interview/_criterion_row.html.twig') }}
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="row flex-between-center">
+                                <div class="col-md text-center">
+                                    <h5 class="mb-2 mb-md-0">There is no current recruitment session</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="modal fade" id="addDepartmentModal" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content border">
+                        <div class="modal-header px-card bg-light border-bottom-0">
+                            <h5 class="modal-title">
+                                Add Criterion
+                            </h5>
+                            <button class="btn-close me-n1"
+                                    type="button"
+                                    data-bs-dismiss="modal"
+                                    aria-label="Close">
+
+                            </button>
+                        </div>
+                        <div class="modal-body p-card addDCriterionModelBody">
+                            {{ include('collective_interview/_criterion_form.html.twig') }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

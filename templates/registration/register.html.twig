@@ -1,0 +1,43 @@
+{% extends 'base_simple.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+  <div class="card">
+    <div class="card-body p-4 p-sm-5">
+      {% if currentRecruitmentSession and currentRecruitmentSession.start is not null %}
+      <div class="row flex-between-center mb-2">
+        <div class="col-auto">
+          <h5>Register</h5>
+        </div>
+        <div class="col-auto fs--1 text-600"><span class="mb-0 undefined">Have an account?</span> <span><a href="{{ path('app_login') }}">Login</a></span></div>
+      </div>
+      {% for flash in app.flashes('error') %}
+          <div class="alert alert-danger errors">{{ form_errors(registrationForm) }}</div>
+      {% endfor %}
+      {% for flash in app.flashes('errorDep') %}
+          <div class="alert alert-danger errors">{{ flash }}</div>
+      {% endfor %}
+      {{ form_start(registrationForm) }}
+        {{ form_widget(registrationForm) }}
+      <div class="mb-3">
+        <button class="btn btn-primary btn-sm d-block w-100 mt-3" type="submit" name="submit">Register</button>
+      </div>
+      {{ form_end(registrationForm) }}
+      {% else %}
+      <div class="row flex-between-center mb-2">
+        <h5>There is no current recruitment session!</h5>
+      </div>
+        <div class="position-relative mt-4">
+          <hr class="bg-300">
+          <div class="divider-content-center">Have an account ?</div>
+        </div>
+        <div class="d-flex justify-content-center">
+        <a class="btn btn-falcon-default btn-sm mt-3" href="{{ path('app_login') }}">Login<span class="fas fa-chevron-right me-1"
+                      data-fa-transform="shrink-4 down-1"></span>
+        </a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endblock body %}

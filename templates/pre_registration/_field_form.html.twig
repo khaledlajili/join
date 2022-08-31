@@ -1,0 +1,54 @@
+{% import _self as formMacros %}
+{% macro printOptionRow(preRegistrationFormFieldOption) %}
+    <div class="input-group option">
+        {{ form_widget(preRegistrationFormFieldOption) }}
+        <a class="m-1 remove-option-button text-danger cursor-pointer" style="z-index: 0">
+            <span class="fa-solid fa-xmark" data-fa-transform="shrink-3 down-2"></span>
+        </a>
+    </div>
+    {{ form_errors(preRegistrationFormFieldOption) }}
+{% endmacro %}
+
+
+{{ form_start(fieldForm,{'attr' : {'class' : 'add-card-form add-field-form'}}) }}
+
+{{ form_row(fieldForm.label) }}
+<div class="select-question-type">
+    {{ form_row(fieldForm.type) }}
+</div>
+<ul>
+    {% for flash in app.flashes('error') %}
+        <li class="text-danger mb-3">{{ flash }}</li>
+    {% endfor %}
+</ul>
+<div class="option-field-container">
+    <button class="btn btn-falcon-default btn-sm add-another-collection-widget mb-3" type="button"
+            data-list-selector="#option-fields-list"><span class="fas fa-plus"
+                                                           data-fa-transform="shrink-3 down-2"></span><span
+                class="d-none d-sm-inline-block ms-1">Add option</span></button>
+    <ul id="option-fields-list" style="list-style-type: none;"
+        data-prototype="{{ formMacros.printOptionRow(fieldForm.preRegistrationFormFieldOptions.vars.prototype)|e }}"
+        data-widget-tags="{{ '<li></li>'|e }}"
+        data-widget-counter="{{ fieldForm.preRegistrationFormFieldOptions|length }}">
+        {% for preRegistrationFormFieldOption in fieldForm.preRegistrationFormFieldOptions %}
+            {{ formMacros.printOptionRow(preRegistrationFormFieldOption) }}
+        {% endfor %}
+    </ul>
+</div>
+{% if recruitmentSession.depChoiceMaxNbre %}
+    {{ form_row(fieldForm.departments) }}
+{% endif %}
+{{ form_row(fieldForm.required) }}
+<div class="row gx-2 mt-2">
+    <div class="col">
+        <button class="btn btn-primary btn-sm d-block w-100" type="submit"><span class="fas fa-plus"
+                                                                                 data-fa-transform="shrink-3 down-2"></span>Add
+        </button>
+    </div>
+    <div class="col">
+        <button class="btn btn-outline-secondary btn-sm d-block w-100 border-400"
+                type="button" id="cancel_button_add" data-btn-form="hide">Cancel
+        </button>
+    </div>
+</div>
+{{ form_end(fieldForm) }}

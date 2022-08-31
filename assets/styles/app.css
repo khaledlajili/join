@@ -1,0 +1,7 @@
+@import "choices.js/public/assets/styles/choices.css";
+@import "./css/theme.css";
+.disabled-custom{
+    pointer-events:none;
+}
+
+

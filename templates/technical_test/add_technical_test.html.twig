@@ -1,0 +1,92 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Technical Tests{% endblock %}
+
+{% block stylesheets %}
+    {{ encore_entry_link_tags('app') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('app') }}
+{% endblock %}
+
+
+{% block body %}
+    <main class="main" id="top">
+        <div class="container" data-layout="container">
+            {{ include('_sidebar.html.twig') }}
+            <div class="content">
+                {{ include('_navbar.html.twig') }}
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h5 class="mb-2 mb-md-0">Technical Test</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-0">
+                    <div class="col-lg-8 pe-lg-2">
+                        <div class="card mb-3 ">
+                            <div class="card-header ">
+                                <div class="row">
+                                    <div>
+                                        <h5 class="mb-0">Technical test</h5>
+                                    </div>
+                                </div>
+                                {% for flash in app.flashes('error') %}
+                                    <div class="alert alert-danger">{{ flash }}</div>
+                                    <hr>
+                                {% endfor %}
+                            </div>
+                            <div class="card-body bg-light">
+                                <div class="row gx-2" id="technicalTestsFormsContainer">
+                                    {% for department in departments %}
+                                        {{ department.name }}
+                                        {% set form =  technicalTestForm.createView %}
+                                        {{ form_start(form) }}
+                                        {{ form_row(form.pdf) }}
+                                        <input type="hidden" id="technical_test_department"
+                                               name="technical_test[department]"
+                                               value="{{ department.id }}">
+                                        {{ form_row(form._token) }}
+                                        {{ form_row(form.submit) }}
+                                        {{ form_end(form, {'render_rest': false}) }}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 ps-lg-2">
+                        <div class="sticky-sidebar">
+                            {% for technicalTest in currentRecruitmentSession.technicalTests %}
+                                <div class="mb-3">
+                                    <div class="card mb-lg-0">
+                                        <div class="card-header">
+                                            <div class="row flex-between-center">
+                                                <div class="col-4 col-sm-auto d-flex align-items-center pe-0">
+                                                    <h5 class="fs-0 mb-0 text-nowrap py-2 py-xl-0">{{ technicalTest.department.name }}
+                                                        test</h5>
+                                                </div>
+                                                <div class="col-8 col-sm-auto ms-auto text-end ps-0">
+                                                    <div id="orders-actions">
+                                                        <a class="btn btn-falcon-default btn-sm"
+                                                           href="{{ path('app_technical_test_view',{ technicalTest : technicalTest.pdf }) }}"
+                                                           target="_blank"><span class="fas fa-eye"
+                                                                                 data-fa-transform="shrink-3 down-2"></span><span
+                                                                    class="d-none d-sm-inline-block ms-1">View</span></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

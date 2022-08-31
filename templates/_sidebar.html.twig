@@ -1,0 +1,244 @@
+<nav class="navbar navbar-light navbar-vertical navbar-expand-xl">
+
+    <div class="d-flex align-items-center">
+        <div class="toggle-icon-wrapper">
+
+            <button class="btn navbar-toggler-humburger-icon navbar-vertical-toggle"
+                    data-bs-toggle="tooltip" data-bs-placement="left" title="Toggle Navigation"><span
+                        class="navbar-toggle-icon"><span class="toggle-line"></span></span></button>
+
+        </div>
+        <a class="navbar-brand"
+           href=" {% if is_granted('ROLE_CANDIDATE') %}{{ path('app_candidate') }} {% elseif is_granted('ROLE_RECRUITER') %}{{ path('app_recruiter') }}{% elseif is_granted('ROLE_ADMIN') %}{{ path('app_admin') }} {% endif %}">
+            <div class="d-flex align-items-center py-3"><img class="me-2"
+                                                             src="{{ asset('build/images/logo_join/logo_join.55b5addf.png') }}"
+                                                             alt="" width="100"/>
+            </div>
+        </a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="navbarVerticalCollapse">
+        <div class="navbar-vertical-content scrollbar">
+            <ul class="navbar-nav flex-column mb-3" id="navbarVerticalNav">
+
+                {% if is_granted('ROLE_ADMIN') %}
+                    <li class="nav-item">
+                        <!-- parent pages--><a class="nav-link" href="{{ path('app_admin') }}" role="button"
+                                               aria-expanded="false">
+                            <div class="d-flex align-items-center"><span class="nav-link-icon"><span
+                                            class="fa fa-bullhorn"></span></span><span class="nav-link-text ps-1">Recruitment sessions</span>
+                            </div>
+                        </a>
+                        <!-- parent pages--><a class="nav-link dropdown-indicator" href="#selection" role="button"
+                                               data-bs-toggle="collapse" aria-expanded="false" aria-controls="email">
+                            <div class="d-flex align-items-center"><span class="nav-link-icon"><span
+                                            class="fas fa-check"></span></span><span class="nav-link-text ps-1">Selection & results</span>
+                            </div>
+                        </a>
+                        <ul class="nav collapse false" id="selection">
+                            <li class="nav-item"><a class="nav-link" href="{{ path('app_results') }}"
+                                                    aria-expanded="false">
+                                    <div class="d-flex align-items-center"><span class="nav-link-text ps-1">Selection Dashboard</span>
+                                    </div>
+                                </a>
+                                <!-- more inner pages-->
+                            </li>
+                            <li class="nav-item"><a class="nav-link" href="{{ path('app_pre_registration_result') }}"
+                                                    aria-expanded="false">
+                                    <div class="d-flex align-items-center"><span class="nav-link-text ps-1">Preregistration</span>
+                                    </div>
+                                </a>
+                                <!-- more inner pages-->
+                            </li>
+                            <li class="nav-item"><a class="nav-link" href="{{ path('app_collective_result') }}"
+                                                    aria-expanded="false">
+                                    <div class="d-flex align-items-center"><span
+                                                class="nav-link-text ps-1">Collective</span>
+                                    </div>
+                                </a>
+                                <!-- more inner pages-->
+                            </li>
+                            <li class="nav-item"><a class="nav-link" href="{{ path('app_technical_test_result') }}"
+                                                    aria-expanded="false">
+                                    <div class="d-flex align-items-center"><span class="nav-link-text ps-1">Technical Test</span>
+                                    </div>
+                                </a>
+                                <!-- more inner pages-->
+                            </li>
+                            <li class="nav-item"><a class="nav-link" href="{{ path('app_individual_result') }}"
+                                                    aria-expanded="false">
+                                    <div class="d-flex align-items-center"><span
+                                                class="nav-link-text ps-1">Individual</span>
+                                    </div>
+                                </a>
+                                <!-- more inner pages-->
+                            </li>
+                            <li class="nav-item"><a class="nav-link" href="{{ path('app_trial_result') }}"
+                                                    aria-expanded="false">
+                                    <div class="d-flex align-items-center"><span
+                                                class="nav-link-text ps-1">Trial Test</span>
+                                    </div>
+                                </a>
+                                <!-- more inner pages-->
+                            </li>
+
+                        </ul>
+                        <!-- parent pages--><a class="nav-link dropdown-indicator" href="#collective" role="button"
+                                               data-bs-toggle="collapse" aria-expanded="false" aria-controls="email">
+                            <div class="d-flex align-items-center"><span class="nav-link-icon"><span
+                                            class="fas fa-users-between-lines"></span></span><span
+                                        class="nav-link-text ps-1">Collective Interviews</span>
+                            </div>
+                        </a>
+                        <ul class="nav collapse false" id="collective">
+                            <li class="nav-item"><a class="nav-link"
+                                                    href="{{ path('app_collective_interview_evaluation_grid') }}"
+                                                    aria-expanded="false">
+                                    <div class="d-flex align-items-center"><span class="nav-link-text ps-1">Grid</span>
+                                    </div>
+                                </a>
+                                <!-- more inner pages-->
+                            </li>
+                            <li class="nav-item"><a class="nav-link" href="{{ path('app_collective_interview') }}"
+                                                    aria-expanded="false">
+                                    <div class="d-flex align-items-center"><span
+                                                class="nav-link-text ps-1">Interviews</span>
+                                    </div>
+                                </a>
+                                <!-- more inner pages-->
+                            </li>
+
+                        </ul>
+                        <!-- parent pages--><a class="nav-link dropdown-indicator" href="#interview" role="button"
+                                               data-bs-toggle="collapse" aria-expanded="false" aria-controls="email">
+                            <div class="d-flex align-items-center"><span class="nav-link-icon"><span
+                                            class="fas fa-calendar-check"></span></span><span
+                                        class="nav-link-text ps-1">Individual Interviews</span>
+                            </div>
+                        </a>
+                        <ul class="nav collapse false" id="interview">
+                            <li class="nav-item"><a class="nav-link" href="{{ path('app_interview_evaluation_grid') }}"
+                                                    aria-expanded="false">
+                                    <div class="d-flex align-items-center"><span class="nav-link-text ps-1">Grid</span>
+                                    </div>
+                                </a>
+                                <!-- more inner pages-->
+                            </li>
+                            <li class="nav-item"><a class="nav-link" href="{{ path('app_interviews_redirect') }}"
+                                                    aria-expanded="false">
+                                    <div class="d-flex align-items-center"><span
+                                                class="nav-link-text ps-1">Interviews</span>
+                                    </div>
+                                </a>
+                                <!-- more inner pages-->
+                            </li>
+                            <li class="nav-item"><a class="nav-link" href="{{ path('app_individual_demandes') }}"
+                                                    aria-expanded="false">
+                                    <div class="d-flex align-items-center"><span class="nav-link-text ps-1">Cancelation demandes</span>
+                                    </div>
+                                </a>
+                                <!-- more inner pages-->
+                            </li>
+
+                        </ul>
+                        <!-- parent pages--><a class="nav-link" href="{{ path('app_recruiter_register') }}"
+                                               role="button" aria-expanded="false">
+                            <div class="d-flex align-items-center"><span class="nav-link-icon"><span
+                                            class="fas fa-users"></span></span><span class="nav-link-text ps-1">Recruiters</span>
+                            </div>
+                        </a>
+
+                    </li>
+                {% endif %}
+                {% if is_granted('ROLE_CANDIDATE') %}
+                <li class="nav-item">
+                    <!-- parent pages--><a class="nav-link" href="{{ path('app_candidate') }}" role="button"
+                                           aria-expanded="false">
+                        <div class="d-flex align-items-center"><span class="nav-link-icon"><span
+                                        class="fa fa-home"></span></span><span
+                                    class="nav-link-text ps-1">Dashboard</span>
+                        </div>
+                    </a>
+                    <!-- parent pages--><a class="nav-link" href="{{ path('app_pre_registration_form') }}"
+                                           role="button" aria-expanded="false">
+                        <div class="d-flex align-items-center"><span class="nav-link-icon"><span
+                                        class="fas fa-circle-question"></span></span><span
+                                    class="nav-link-text ps-1">Pre-Registration</span>
+                        </div>
+                    </a>
+                    {% if app.user.recruitmentSession.technicalTest %}
+                        <!-- parent pages--><a class="nav-link" href="{{ path('app_technical_test_submit') }}"
+                                               role="button" aria-expanded="false">
+                        <div class="d-flex align-items-center"><span class="nav-link-icon"><span
+                                        class="fas fa-copy"></span></span><span class="nav-link-text ps-1">Technical test</span>
+                        </div>
+                    </a>
+                    {% endif %}
+
+                    {% if app.user.recruitmentSession.bookingForInterview %}
+                        <!-- parent pages--><a class="nav-link"
+                                               href="{{ path('app_individual_interview_booking') }}" role="button"
+                                               aria-expanded="false">
+                        <div class="d-flex align-items-center"><span class="nav-link-icon"><span
+                                        class="fas fa-calendar-check"></span></span><span
+                                    class="nav-link-text ps-1">Book an interview</span>
+                        </div>
+                    </a>
+                    {% endif %}
+                    <!-- parent pages--><a class="nav-link" href="{{ path('app_feedback') }}" role="button"
+                                           aria-expanded="false">
+                        <div class="d-flex align-items-center"><span class="nav-link-icon"><span
+                                        class="fas fa-star"></span></span><span
+                                    class="nav-link-text ps-1">Feedback</span>
+                        </div>
+                    </a>
+                    {% endif %}
+                    {% if is_granted('ROLE_RECRUITER') %}
+                <li class="nav-item">
+                    <!-- parent pages--><a class="nav-link" href="{{ path('app_recruiter') }}" role="button"
+                                           aria-expanded="false">
+                        <div class="d-flex align-items-center"><span class="nav-link-icon"><span
+                                        class="fa fa-home"></span></span><span
+                                    class="nav-link-text ps-1">Dashboard</span>
+                        </div>
+                    </a>
+                    <!-- parent pages--><a class="nav-link" href="{{ path('app_collective_interviews') }}" role="button"
+                                           aria-expanded="false">
+                        <div class="d-flex align-items-center"><span class="nav-link-icon"><span
+                                        class="fa fa-users-between-lines"></span></span><span
+                                    class="nav-link-text ps-1">Collective interviews</span>
+                        </div>
+                    </a>
+                    <!-- parent pages--><a class="nav-link dropdown-indicator" href="#interview" role="button"
+                                           data-bs-toggle="collapse" aria-expanded="false" aria-controls="email">
+                        <div class="d-flex align-items-center"><span class="nav-link-icon"><span
+                                        class="fas fa-calendar-check"></span></span><span class="nav-link-text ps-1">Interviews</span>
+                        </div>
+                    </a>
+                    <ul class="nav collapse false" id="interview">
+                        <li class="nav-item"><a class="nav-link"
+                                                href="{{ path('app_individual_interview_availability') }}"
+                                                aria-expanded="false">
+                                <div class="d-flex align-items-center"><span
+                                            class="nav-link-text ps-1">Availability</span>
+                                </div>
+                            </a>
+                            <!-- more inner pages-->
+                        </li>
+                        <li class="nav-item"><a class="nav-link" href="{{ path('app_individual_interviews_list') }}"
+                                                aria-expanded="false">
+                                <div class="d-flex align-items-center"><span
+                                            class="nav-link-text ps-1">Interviews list</span>
+                                </div>
+                            </a>
+                            <!-- more inner pages-->
+                        </li>
+
+                    </ul>
+
+                    {% endif %}
+
+            </ul>
+        </div>
+    </div>
+</nav>

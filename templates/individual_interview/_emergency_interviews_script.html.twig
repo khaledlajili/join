@@ -1,0 +1,28 @@
+<script>
+    window.interviews = []
+    {% for interview in interviews %}
+    var _recruiters = [],
+        {% if interview.candidate %}
+        _candidate = '{{ interview.candidate.fName }} {{ interview.candidate.lName }}',
+        {% else %}
+        _candidate = '',
+        {% endif %}
+        _className ={% if interview.emailSent is same as(true) %}'bg-soft-success'{% else %}'bg-soft-info'{% endif %};
+    {% for recruiter in interview.recruiters %}
+    _recruiters.push('{{ recruiter.fName }} {{ recruiter.lName }}')
+    {% endfor %}
+
+    var interview = {
+        id: '{{ interview.id }}',
+        title: '[#{{ interview.id }}]',
+        place: '{{ interview.place }}',
+        start: '{{ interview.start|date("Y-m-d H:i") }}',
+        end: '{{ interview.end|date("Y-m-d H:i") }}',
+        className: _className,
+        recruiters: _recruiters,
+        candidates: _candidate,
+        emailSent: {% if interview.emailSent %}1{% else %}0{% endif %}
+    }
+    window.interviews.push(interview)
+    {% endfor %}
+</script>

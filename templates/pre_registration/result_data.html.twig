@@ -1,0 +1,88 @@
+{% if user.result is not null %}
+    {% if user.result.preRegistration is not null %}
+        {% if user.result.preRegistration == true %}
+            <span id="status_popup" class="badge badge rounded-pill d-block p-2 badge-soft-success">Accepted<span
+                        class="ms-1 fas fa-check" data-fa-transform="shrink-2"></span></span>
+        {% elseif user.result.preRegistration == false %}
+            <span id="status_popup" class="badge badge rounded-pill d-block p-2 badge-soft-danger">Refused<span
+                        class="ms-1  fas fa-close" data-fa-transform="shrink-2"></span></span>
+        {% endif %}
+    {% else %}
+        <span id="status_popup" class="badge badge rounded-pill d-block p-2 badge-soft-info">Pending<span
+                    class="ms-1 far fa-clock" data-fa-transform="shrink-2"></span></span>
+    {% endif %}
+{% else %}
+    <span id="status_popup" class="badge badge rounded-pill d-block p-2 badge-soft-info">Pending<span
+                class="ms-1  far fa-clock" data-fa-transform="shrink-2"></span></span>
+{% endif %}
+
+<div class="card border h-100 border-liht m-2">
+    <div class="card-body">
+        <div class="card-title fw-bolder">Personal Informations</div>
+        <p class="card-text "><strong>Name: </strong>{{ user.FName }} {{ user.LName }}</p>
+        <p class="card-text "><strong>Birthdate: </strong>{{ user.Birthday|date }}</p>
+        <p class="card-text "><strong>Email: </strong>{{ user.Email }}</p>
+        <p class="card-text "><strong>Phone number: </strong>{{ user.Phone }}</p>
+        <p class="card-text "><strong>Adress: </strong>{{ user.Adress }}</p>
+        <p class="card-text "><strong>Study
+                Level: </strong> {% if user.StudyLevel %} {{ user.StudyLevel.Name }} {% endif %} </p>
+        {% if user.recruitmentSession.depChoiceMaxNbre > 0 %}
+            <p class="card-text "><strong>Chosen Departments: </strong></p>
+            <ul>
+                {% for department in user.departments %}
+                    <li>{{ department.name }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+</div>
+{% if status == 'dontHaveData' %}
+    <div class="card mb-3">
+        <div class="card-body">
+            <div class="row flex-between-center">
+                <div class="col-md text-center">
+                    <h5 class="mb-2 mb-md-0">Candidate did not fill the preregistration form.</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+{% else %}
+    {% for responseLabel,response in responses %}
+        <div class="card border h-100 border-light m-2">
+            <div class="card-body">
+                <div class="card-title">{{ responseLabel }}</div>
+                {% if response is iterable %}
+                    {% for responseValue in response %}
+                        <p class="card-text">{{ responseValue }}</p>
+                    {% endfor %}
+                {% else %}
+                    {% if response.preRegistrationFormField.type == 'file' %}
+                        <a class="btn btn-falcon-default btn-sm"
+                           href="{{ path('app_pre_registration_file_view',{ file : response.response }) }}"
+                           target="_blank"><span class="fas fa-eye"
+                                                 data-fa-transform="shrink-3 down-2"></span><span
+                                    class="d-none d-sm-inline-block ms-1">View</span></a>
+                    {% else %}
+                        <p class="card-text">{{ response.response }}</p>
+                    {% endif %}
+                {% endif %}
+
+            </div>
+        </div>
+    {% endfor %}
+{% endif %}
+<div class="result_popup mb-4">
+    {% if user.recruitmentSession.preRegistrationSelectionEnd > date() %}
+        {% if user.responses is not empty %}
+            <button class="btn btn-sm  btn-falcon-success btn-sm float-end m-1 {% if user.result is not null %}{% if user.result.preRegistration is not null %}{% if user.result.preRegistration == true %} disabled {% endif %}{% endif %}{% endif %} "
+                    data-value="accept" data-user-id="{{ user.Id }}">Accept
+            </button>
+        {% endif %}
+        {% if ((user.responses is empty) and (user.recruitmentSession.registrationEnd < date() )) or (user.responses is not empty) %}
+            <button class="btn btn-sm  btn-falcon-danger btn-sm float-end m-1 {% if user.result is not null %}{% if user.result.preRegistration is not null %}{% if user.result.preRegistration == false %} disabled {% endif %}{% endif %}{% endif %} "
+                    data-value="refuse" data-user-id="{{ user.Id }}">Refuse
+            </button>
+        {% endif %}
+    {% endif %}
+</div>
+

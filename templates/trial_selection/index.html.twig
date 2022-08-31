@@ -1,0 +1,130 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Trial Period Result{% endblock %}
+
+{% block stylesheets %}
+{{ encore_entry_link_tags('trialSelection') }}
+{% endblock %}
+
+{% block javascripts %}
+{{ encore_entry_script_tags('trialSelection') }}
+{% endblock %}
+
+
+{% block body %}
+<main class="main" id="top">
+  <div class="container" data-layout="container">
+
+    {{ include('_sidebar.html.twig') }}
+
+    <div class="content">
+
+      {{ include('_navbar.html.twig') }}
+
+      <div class="card mb-3">
+        <div class="card-header">
+          <div class="row flex-between-end">
+            <div class="col-auto align-self-center">
+              <h5 class="mb-0" data-anchor="data-anchor"> Trial Period Selection</h5>
+            </div>
+            <div class="col-auto ms-auto">
+            </div>
+          </div>
+        </div>
+  <div class="card-body bg-light">
+    <div class="table-responsive scrollbar">
+      <table class="table table-sm table-striped fs--1 mb-0 overflow-hidden">
+        <thead class="bg-200 text-900">
+        <tr>
+            <th></th>
+                      <th scope="col">Name</th>
+                      <th scope="col">Date de naissance</th>
+                      <th scope="col">Field of study</th>
+                      <th scope="col">Status</th>
+            <th>Email</th>
+                      <th scope="col">Department</th>
+                      <th scope="col"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for user in users %}
+                    <tr class="align-middle" >
+                        <td>
+                            <div class="avatar avatar-xl">
+                                <img class="rounded-circle" src="{{ asset(user.imgPath) }}" alt=""/>
+                            </div>
+                        </td>
+                      <td class="text-nowrap"  id="{{user.Id}}" >
+                        <div class="d-flex align-items-center">
+                          <div class="ms-2">{{user.FName}} {{user.LName}}</div>
+                        </div>
+                      </td>
+                      <td class="text-nowrap"  id="{{user.Id}}" >
+                        {{user.Birthday|date("Y M d")}}</td>
+                      <td class="text-nowrap "  id="{{user.Id}}" >
+                      {% if user.StudyLevel %} {{user.StudyLevel.Name}} {% endif %} </td>
+                      <td  id="{{user.Id}}" >
+                        {% if user.result is not null %}
+                          {% if user.result.TrialPeriod is not null %}
+                            {% if user.result.TrialPeriod == true %}
+                            <span id="{{user.Id}}"
+                              class="badge badge rounded-pill d-block p-2 badge-soft-success status">Accepted<span
+                                class="ms-1 fas fa-check" data-fa-transform="shrink-2"></span></span>
+                            {% elseif user.result.TrialPeriod == false %}
+                            <span id="{{user.Id}}"
+                              class="badge badge rounded-pill d-block p-2 badge-soft-danger status">Refused<span
+                                class="ms-1  fas fa-close" data-fa-transform="shrink-2"></span></span>
+                            {% endif %}
+                          {% else %}
+                          <span id="{{user.Id}}"
+                            class="badge badge rounded-pill d-block p-2 badge-soft-info status">Pending<span
+                              class="ms-1 far fa-clock" data-fa-transform="shrink-2"></span></span>
+                          {% endif %}
+                        {% else %}
+                        <span id="{{user.Id}}"
+                          class="badge badge rounded-pill d-block p-2 badge-soft-info status">Pending<span
+                            class="ms-1  far fa-clock" data-fa-transform="shrink-2"></span></span>
+                        {% endif %}
+                      </td>
+                        <td>
+                            {% if (user.result) and (user.result.trialPeriodEmail is same as(true)) %}
+                                <span id="{{ user.Id }}"
+                                      class="badge badge rounded-pill d-block p-2 badge-soft-success email-status">Email sent<span
+                                            class="ms-1 fas fa-check"
+                                            data-fa-transform="shrink-2"></span></span>
+                            {% else %}
+                                <span id="{{ user.Id }}"
+                                      class="badge badge rounded-pill d-block p-2 badge-soft-danger email-status">Email not sent<span
+                                            class="ms-1 fas fa-close"
+                                            data-fa-transform="shrink-2"></span></span>
+                            {% endif %}
+                        </td>
+                      <td class="text-nowrap  " id="{{user.Id}}">
+                        {{  user.result.DepartmentChosen.name }} 
+                      </td>
+                      <td class="result">
+                          <button class="btn btn-sm  btn-falcon-info btn-sm float-end m-1"
+                                  data-value="mail" data-user-id="{{ user.Id }}">Send Email
+                          </button>
+                          {% if (user.recruitmentSession.trialPeriodSelectionEnd > date()) and (user.recruitmentSession.interviewsSelectionEnd < date())  %}
+                              <button
+                                      class="btn btn-sm  btn-falcon-success btn-sm float-end m-1 {% if user.result is not null  %}{% if user.result.TrialPeriod is not null  %}{% if user.result.TrialPeriod == true %} disabled {% endif %}{% endif %}{% endif %} "
+                                      data-value="accept" data-user-id="{{user.Id}}">Accept</button>
+                              <button
+                                      class="btn btn-sm  btn-falcon-danger btn-sm float-end m-1 {% if user.result  is not null %}{% if user.result.TrialPeriod is not null    %}{% if user.result.TrialPeriod == false %} disabled {% endif %}{% endif %}{% endif %} "
+                                      data-value="refuse" data-user-id="{{user.Id}}">Refuse</button>
+                          {% endif %}
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+
+            </div>
+      </div>
+    </div>
+  </div>
+</main>
+            </body>
+            {% endblock %}

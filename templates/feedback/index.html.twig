@@ -1,0 +1,97 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Feedback{% endblock %}
+
+{% block stylesheets %}
+    {{ encore_entry_link_tags('feedback') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('feedback') }}
+{% endblock %}
+
+
+{% block body %}
+    <main class="main" id="top">
+        <div class="container" data-layout="container">
+
+            {{ include('_sidebar.html.twig') }}
+
+            <div class="content">
+
+                {{ include('_navbar.html.twig') }}
+                {% if access is same as(true) %}
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <div class="row flex-between-end">
+                                <div class="col-auto align-self-center">
+                                    <h5 class="mb-0" data-anchor="data-anchor"> Feedback</h5>
+                                </div>
+                                <div class="col-auto ms-auto">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body bg-light">
+                            <div class="tab-content">
+                                <div class="  tab-pane preview-tab-pane active" role="tabpanel"
+                                     aria-labelledby="tab-dom-d4ebf6c5-74b4-4308-8c64-cda718c9b324"
+                                     id="dom-d4ebf6c5-74b4-4308-8c64-cda718c9b324">
+                                    <div class=" scrollbar">
+                                        {% for flash in app.flashes('error') %}
+                                            <div class="alert alert-danger errors">{{ form_errors(feedbackForm) }}</div>
+                                        {% endfor %}
+                                        <div class=" errors">
+                                        </div>
+                                        {{ form_start(feedbackForm) }}
+                                        {% if feedbackForm.preRegistrationRating is defined %}
+                                            <h5 class="mb-0">Pre-Registration</h5>
+                                            <div class="d-block mb-2" id="rater-preRegistration"></div>
+                                            {{ form_row(feedbackForm.preRegistrationRating) }}
+                                            {{ form_row(feedbackForm.preRegistrationRemark) }}
+                                        {% endif %}
+                                        {% if feedbackForm.technicalTestRating is defined %}
+                                            <h5 class="mb-0">Technical Test</h5>
+                                            <div class="d-block mb-2" id="rater-technicalTest"></div>
+                                            {{ form_row(feedbackForm.technicalTestRating) }}
+                                            {{ form_row(feedbackForm.technicalTestRemark) }}
+                                        {% endif %}
+                                        {% if feedbackForm.collectiveInterviewsRating is defined %}
+                                            <h5 class="mb-0">Collective Interview</h5>
+                                            <div class="d-block mb-2" id="rater-collectiveInterview"></div>
+                                            {{ form_row(feedbackForm.collectiveInterviewsRating) }}
+                                            {{ form_row(feedbackForm.collectiveInterviewsRemark) }}
+                                        {% endif %}
+                                        {% if feedbackForm.individualInterviewsRating is defined %}
+                                            <h5 class="mb-0">Interview</h5>
+                                            <div class="d-block mb-2" id="rater-inteview"></div>
+                                            {{ form_row(feedbackForm.individualInterviewsRating) }}
+                                            {{ form_row(feedbackForm.individualInterviewsRemark) }}
+                                        {% endif %}
+                                        {% if feedbackForm.trialPeriodRating is defined %}
+                                            <h5 class="mb-0">Trial Period</h5>
+                                            <div class="d-block mb-2" id="rater-trial"></div>
+                                            {{ form_row(feedbackForm.trialPeriodRating) }}
+                                            {{ form_row(feedbackForm.trialPeriodRemark) }}
+                                        {% endif %}
+                                        {{ form_end(feedbackForm) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="row flex-between-center">
+                                <div class="col-md text-center">
+                                    <h5 class="mb-2 mb-md-0">You currently cannot submit a feedback</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
+            </div>
+        </div>
+    </main>
+{% endblock %}

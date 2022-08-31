@@ -1,0 +1,21 @@
+{{ form(form,{'attr':{'class':'interview_form'}}) }}
+<script>
+    window.Interviews = []
+    {% for Interview in Interviews %}
+    var _recruiters = []
+    {% for recruiter in Interview.recruiters %}
+    _recruiters.push('{{ recruiter.fName }}')
+    {% endfor %}
+    var Interview = {
+        id: '{{ Interview.id }}',
+        title: '[#{{ Interview.id }}]',
+        place: '{{ Interview.place }}',
+        start: '{{ Interview.start|date("Y-m-d H:i") }}',
+        end: '{{ Interview.end|date("Y-m-d H:i") }}',
+        className: 'bg-soft-success',
+        recruiters: _recruiters
+    }
+    window.Interviews.push(Interview)
+
+    {% endfor %}
+</script>

@@ -1,0 +1,27 @@
+<script>
+    window.collectiveInterviews = []
+    {% for collectiveInterview in collectiveInterviews %}
+    var _recruiters = [],
+        _candidates = [],
+        _className ={% if collectiveInterview.emailSent is same as(true) %}'bg-soft-success'{% else %}'bg-soft-info'{% endif %};
+    {% for recruiter in collectiveInterview.recruiters %}
+    _recruiters.push('{{ recruiter.fName }} {{ recruiter.lName }}')
+    {% endfor %}
+    {% for candidate in collectiveInterview.users %}
+    _candidates.push('{{ candidate.fName }} {{ candidate.lName }}')
+    {% endfor %}
+    var collectiveInterview = {
+        id: '{{ collectiveInterview.id }}',
+        title: '[#{{ collectiveInterview.id }}]',
+        place: '{{ collectiveInterview.place }}',
+        start: '{{ collectiveInterview.start|date("Y-m-d H:i") }}',
+        end: '{{ collectiveInterview.end|date("Y-m-d H:i") }}',
+        className: _className,
+        recruiters: _recruiters,
+        candidates: _candidates,
+        emailSent: {% if collectiveInterview.emailSent %}1{% else %}0{% endif %},
+        passed: {% if collectiveInterview.start < date() %}1{% else %}0{% endif %}
+    }
+    window.collectiveInterviews.push(collectiveInterview)
+    {% endfor %}
+</script>

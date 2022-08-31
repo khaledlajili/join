@@ -1,0 +1,88 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Pre-Registration Form{% endblock %}
+
+{% block stylesheets %}
+    {{ encore_entry_link_tags('app') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('app') }}
+{% endblock %}
+
+
+{% block body %}
+    <main class="main" id="top">
+        <div class="container" data-layout="container">
+
+            {{ include('_sidebar.html.twig') }}
+
+            <div class="content">
+
+                {{ include('_navbar.html.twig') }}
+                {% if recruitmentSession %}
+                    {% if recruitmentSession.registrationEnd < date() %}
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="row flex-between-center">
+                                    <div class="col-md text-center">
+                                        <h5 class="mb-2 mb-md-0">We are no longer accepting applications.</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% elseif app.user.responses|length > 0 %}
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="row flex-between-center">
+                                    <div class="col-md text-center">
+                                        <h5 class="mb-2 mb-md-0">You cannot submit more than one application.</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                <div class="row flex-between-end">
+                                    <div class="col-auto align-self-center">
+                                        <h5 class="mb-0" data-anchor="data-anchor">Pre-Registration Form</h5>
+                                    </div>
+                                    <div class="col-auto ms-auto">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body bg-light">
+                                <div class="tab-content">
+                                    <div class="tab-pane preview-tab-pane active" role="tabpanel"
+                                         aria-labelledby="tab-dom-d4ebf6c5-74b4-4308-8c64-cda718c9b324"
+                                         id="dom-d4ebf6c5-74b4-4308-8c64-cda718c9b324">
+                                        {{ form_start(PreRegistrationForm) }}
+                                        {{ form_widget(PreRegistrationForm) }}
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                        {{ form_end(PreRegistrationForm) }}
+                                    </div>
+                                    <div class="tab-pane code-tab-pane" role="tabpanel"
+                                         aria-labelledby="tab-dom-ed2c63c2-870e-4e8f-b431-d8a9ac67961a"
+                                         id="dom-ed2c63c2-870e-4e8f-b431-d8a9ac67961a">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="row flex-between-center">
+                                <div class="col-md text-center">
+                                    <h5 class="mb-2 mb-md-0">There is no current recruitment session</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </main>
+
+{% endblock %}

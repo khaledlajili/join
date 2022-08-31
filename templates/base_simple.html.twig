@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="icon" type="image/x-icon" href="{{ asset('build/images/logo_join/icon_join.1be04477.png') }}">
+
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('app') }}
+    {% endblock %}
+
+    {% block javascripts %}
+        {{ encore_entry_script_tags('app') }}
+    {% endblock %}
+
+</head>
+<body>
+<main class="main" id="top">
+    <div class="container" data-layout="container">
+        <div class="row flex-center min-vh-100 py-6">
+            <div class="col-sm-10 col-md-8 col-lg-6 col-xl-5 col-xxl-4">
+                <a class="d-flex flex-center mb-4" href="">
+                    <img class="me-2" src="{{ asset('build/images/logo_join/logo_join.55b5addf.png') }}" alt=""
+                         width="180"/>
+                </a>
+
+                {% block body %}{% endblock %}
+
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

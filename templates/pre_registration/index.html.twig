@@ -1,0 +1,155 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Pre-Registration Form{% endblock %}
+
+{% block stylesheets %}
+    {{ encore_entry_link_tags('preRegistrationForm') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('preRegistrationForm') }}
+{% endblock %}
+
+{% block body %}
+    <main class="main" id="top">
+        <div class="container" data-layout="container">
+
+            {{ include('_sidebar.html.twig') }}
+
+            <div class="content">
+
+                {{ include('_navbar.html.twig') }}
+
+                {% if recruitmentSession %}
+                    {% if recruitmentSession.start %}
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="row flex-between-center">
+                                    <div class="col-md text-center">
+                                        <h5 class="mb-2 mb-md-0">You no longer can edit the pre-registration form.</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="kanban-container scrollbar  me-n3">
+                            <div class="kanban-column mt-3 " style="width:96%;">
+                                <div class="kanban-column-header">
+                                    <h5 class="fs-0 mb-0"> Pre-registration form fields <span
+                                                id='counter' class="text-500 ">({{ fields|length }})</span></h5>
+                                </div>
+                                <div id="fields_container">
+                                    {% for flash in app.flashes('error') %}
+                                        <div class="alert alert-danger errors">{{ flash }}</div>
+                                    {% endfor %}
+                                    <div class="field-item-container kanban-items-container scrollbar">
+                                        {% for field in fields %}
+                                            {{ include('pre_registration/_field_item.html.twig') }}
+                                        {% endfor %}
+                                    </div>
+                                    <div class="add-field-form-container">
+                                        {{ include('pre_registration/_field_form.html.twig') }}
+                                    </div>
+                                </div>
+
+                                <div class="kanban-column-footer">
+                                    <button class="btn btn-link btn-sm d-block w-100 btn-add-card text-decoration-none text-600"
+                                            type="button"><span class="fas fa-plus me-2"></span>Add another field
+                                    </button>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary btn-sm d-block saveOrder w-30 mt-2">Save order</button>
+
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="row flex-between-center">
+                                <div class="col-md text-center">
+                                    <h5 class="mb-2 mb-md-0">There is no current recruitment session</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
+                <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="kanban-modal-label-1"
+                     aria-hidden="true" id="orderSavedSuccesfully">
+                    <div class="modal-dialog mt-6" role="document">
+                        <div class="modal-content border-0">
+                            <div class="position-absolute top-0 end-0 mt-2 me-2 z-index-1">
+                                <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base"
+                                        data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body text-center p-0">
+
+                                <div class="p-4 pb-0">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h5 class="mb-3">Order Saved Succesfully</h5>
+                                            <p>
+                                                Your fields order has been saved succesfully !
+
+                                            </p>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="kanban-modal-label-1"
+                     aria-hidden="true" id="savingOrderFailed">
+                    <div class="modal-dialog mt-6" role="document">
+                        <div class="modal-content border-0">
+                            <div class="position-absolute top-0 end-0 mt-2 me-2 z-index-1">
+                                <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base"
+                                        data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body text-center p-0">
+
+                                <div class="p-4 pb-0">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h5 class="mb-3">You can't save the order</h5>
+                                            <p>
+                                                Please add some fields to save their order !
+
+                                            </p>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="kanban-modal-label-1"
+                 aria-hidden="true" id="edit-field-modal">
+                <div class="modal-dialog modal-lg mt-6" role="document">
+                    <div class="modal-content border-0">
+                        <div class="position-absolute top-0 end-0 mt-3 me-3 z-index-1">
+                            <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base"
+                                    data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body p-0">
+                            <div class="bg-light rounded-top-lg py-3 ps-4 pe-6">
+                                <h4 class="mb-1" id="kanban-modal-label-1">Edit Question</h4>
+                            </div>
+                            <div class="p-4">
+                                <div class="row justify-content-center">
+                                    <div class="col-lg-9 edit-field-modal-body">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+{% endblock %}

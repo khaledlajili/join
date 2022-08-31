@@ -1,0 +1,66 @@
+<div class="kanban-item" id="{{ field.id }}">
+    <div class="card kanban-item-card hover-actions-trigger">
+        <div class="card-body">
+            <div class="position-relative">
+                <div class="dropdown font-sans-serif">
+                    <a
+                            href="{{ path('app_pre_registration_remove_field', { field : field.id }) }}"
+                            class="btn btn-sm btn-falcon-danger kanban-item-dropdown-btn hover-actions"
+                            type="button" data-boundary="viewport"
+                            aria-haspopup="true"
+                            aria-expanded="false"><span class="fas fa-trash"></span>
+                    </a>
+
+                </div>
+            </div>
+            <p class="mb-0 fw-medium font-sans-serif stretched-link"
+               data-field-id="{{ field.Id }}">{{ field.label }}</p>
+            {% if field.Departments.first %}
+                <div class="mb-2">
+                    {% for department in field.Departments %}
+                        <span class="badge py-1 me-1 mb-1 badge-soft-primary">{{ department.name }}</span>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <div class="container">
+                <div class="row">
+
+                    <div class=" mb-2">
+                        <label>Type:</label>
+                        <span class=" col badge py-1 me-1 mb-1 badge-soft-success">
+                                                            {% if field.type == 'text' %}
+                                                                Short answer
+                                                            {% elseif field.type == 'textarea' %}
+                                                                Long answer
+                                                            {% elseif field.type == 'select' %}
+                                                                Select menu
+                                                            {% elseif field.type == 'checkbox' %}
+                                                                Multiple choice
+                                                            {% elseif field.type == 'radio' %}
+                                                                Single choice
+                                                            {% elseif field.type == 'file' %}
+                                                                File
+                                                            {% elseif field.type == 'date' %}
+                                                                Date
+                                                            {% endif %}
+                                                            </span>
+                    </div>
+                </div>
+            </div>
+            {% if field.preRegistrationFormFieldOptions.first %}
+                <div class="container">
+                    <label>Options:</label>
+                    <ul><pre>
+                                                    </pre>
+                        {% for option in field.preRegistrationFormFieldOptions %}
+                            <li>{{ option.value }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+            {% if field.required %}
+                <span class="badge py-1 me-1 mb-1 badge-soft-danger">Required</span>
+            {% endif %}
+        </div>
+    </div>
+</div>

@@ -1,0 +1,287 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block stylesheets %}
+    {{ encore_entry_link_tags('app') }}
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('app') }}
+{% endblock %}
+
+
+{% block body %}
+    <main class="main" id="top">
+        <div class="container" data-layout="container">
+
+            {{ include('_sidebar.html.twig') }}
+
+            <div class="content">
+
+                {{ include('_navbar.html.twig') }}
+                <div class="row g-3 mb-3">
+                    {% for flash in app.flashes('success') %}
+                        <div class="alert alert-success ">{{ flash }}</div>
+                    {% endfor %}
+                    <div class="col-lg-12">
+                        <div class="card h-100">
+                            <div class="bg-holder bg-card"></div>
+                            <div class="card-header z-index-1">
+                                <h5 class="text-primary">Welcome {{ user.fName }}</h5>
+                                <h6 class="text-600">Here's your progress in the recruitment process </h6>
+                            </div>
+                            <div class="card-body z-index-1">
+                                <div class="progress mb-3 rounded-pill" style="height: 6px;">
+                                    <div class="progress-bar bg-progress-gradient rounded-pill" role="progressbar"
+                                         style="width: {{ pourcentage }}%" aria-valuenow="43.72" aria-valuemin="0"
+                                         aria-valuemax="100"></div>
+                                </div>
+                                <p class="mb-0 text-primary">{{ pourcentage }}% completed</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xxl-3 col-md-6">
+                        <div class="card {% if state !='preRegOpen' %}  disabled-custom opacity-50 {% endif %} h-100">
+                            <div class="card-header pb-0">
+                                <div class="row">
+                                    <div class="col">
+                                        <p class="mb-1 fs--2   {% if user.Result %}{% if (user.Result.getPreRegistration == true)and (user.Result.isPreRegistrationEmail) %}text-success{% else %}text-500{% endif %}{% else %}text-500{% endif %}">  {% if user.Result %}{% if (user.Result.getPreRegistration == true)and (user.Result.isPreRegistrationEmail) %}Passed{% else %}Pending{% endif %}{% else %}Pending{% endif %}</p>
+                                        <h5 class="text-primary fs-0">Preregistration</h5>
+                                    </div>
+                                    <div class="col-auto">
+                                        <div class="bg-soft-primary px-3 py-3 rounded-circle text-center"
+                                             style="width:60px;height:60px;">
+                                            <h5 class="text-primary mb-0 d-flex flex-column mt-n1">
+                                                <span>{{ recruitmentSession.RegistrationEnd | date("d") }}</span><small
+                                                        class="text-primary fs--2 lh-1">{{ recruitmentSession.RegistrationEnd | date("M") }}</small>
+                                            </h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body d-flex align-items-end">
+                                <div class="row g-3 justify-content-between">
+
+                                    <div class="col-auto">
+                                        <a href="{{ path('app_pre_registration_form') }}"
+                                           class="btn btn-success w-100 fs--1" type="button">Fill the form</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% if recruitmentSession.collectiveInterview %}
+                        <div class="col-xxl-3 col-md-6">
+                            <div class="card {% if (state !='pendingCollectiveDate') and (state !='hasCollectiveInterview') %}  disabled-custom opacity-50 {% endif %} h-100">
+                                <div class="card-header pb-0">
+                                    <div class="row">
+                                        <div class="col">
+                                            <p class="mb-1 fs--2   {% if user.Result %}{% if (user.Result.CollectiveInterviews == true)and (user.Result.isCollectiveInterviewsEmail) %}text-success{% else %}text-500{% endif %}{% else %}text-500{% endif %}">  {% if user.Result %}{% if (user.Result.CollectiveInterviews == true)and (user.Result.isCollectiveInterviewsEmail) %}Passed{% else %}Pending{% endif %}{% else %}Pending{% endif %}</p>
+                                            <h5 class="text-primary fs-0">Collective Interviews</h5>
+                                        </div>
+                                        <div class="col-auto">
+                                            <div class="bg-soft-primary px-3 py-3 rounded-circle text-center"
+                                                 style="width:60px;height:60px;">
+                                                <h5 class="text-primary mb-0 d-flex flex-column mt-n1">
+                                                    <span>{{ recruitmentSession.CollectiveInterviewsEnd | date("d") }}</span><small
+                                                            class="text-primary fs--2 lh-1">{{ recruitmentSession.CollectiveInterviewsEnd | date("M") }}</small>
+
+                                                </h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body d-flex align-items-end">
+                                    <div class="row g-3 justify-content-between">
+
+                                        <div class="col-auto">
+                                            <button class="btn btn-success w-100 fs--1" type="button"
+                                                    data-bs-target="#collectiveInterview" data-bs-toggle="modal">
+                                                Interview details
+                                            </button>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                    {% if recruitmentSession.technicalTest %}
+                        <div class="col-xxl-3 col-md-6">
+                            <div class="card {% if state !='testPeriodStart' %}  disabled-custom opacity-50 {% endif %} h-100">
+                                <div class="card-header pb-0">
+                                    <div class="row">
+                                        <div class="col">
+                                            <p class="mb-1 fs--2 {% if user.Result %}{% if (user.Result.getTechnicalTestResult == true)and (user.Result.isTechnicalTestEmail) %}text-success{% else %}text-500{% endif %}{% else %}text-500{% endif %}">  {% if user.Result %}{% if (user.Result.getTechnicalTestResult == true)and (user.Result.isTechnicalTestEmail) %}Passed{% else %}Pending{% endif %}{% else %}Pending{% endif %}</p>
+                                            <h5 class="text-primary fs-0">Technical Test</h5>
+                                        </div>
+                                        <div class="col-auto">
+                                            <div class="bg-soft-primary px-3 py-3 rounded-circle text-center"
+                                                 style="width:60px;height:60px;">
+                                                <h5 class="text-primary mb-0 d-flex flex-column mt-n1">
+                                                    <span>{{ recruitmentSession.TechnicalTestEnd | date("d") }}</span><small
+                                                            class="text-primary fs--2 lh-1">{{ recruitmentSession.TechnicalTestEnd | date("M") }}</small>
+
+                                                </h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body d-flex align-items-end">
+                                    <div class="row g-3 justify-content-between">
+
+                                        <div class="col-auto">
+                                            <a href="{{ path('app_technical_test_submit') }}"
+                                               class="btn btn-success w-100 fs--1" type="button">Submit your test
+                                            </a>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                    <div class="col-xxl-3 col-md-6">
+                        <div class="card {% if (state !='hasInterview') and (state !='readyForInterview') %}  disabled-custom opacity-50 {% endif %} h-100">
+                            <div class="card-header pb-0">
+                                <div class="row">
+                                    <div class="col">
+                                        <p class="mb-1 fs--2 {% if user.Result %}{% if (user.Result.Interview == true)and (user.Result.isInterviewEmail) %}text-success{% else %}text-500{% endif %}{% else %}text-500{% endif %}">  {% if user.Result %}{% if (user.Result.Interview == true)and (user.Result.isInterviewEmail) %}Passed{% else %}Pending{% endif %}{% else %}Pending{% endif %}</p>
+                                        <h5 class="text-primary fs-0">Interviews</h5>
+                                    </div>
+                                    <div class="col-auto">
+                                        <div class="bg-soft-primary px-3 py-3 rounded-circle text-center"
+                                             style="width:60px;height:60px;">
+                                            <h5 class="text-primary mb-0 d-flex flex-column mt-n1">
+                                                <span>{{ recruitmentSession.getInterviewsEnd | date("d") }}</span><small
+                                                        class="text-primary fs--2 lh-1">{{ recruitmentSession.getInterviewsEnd | date("M") }}</small>
+
+                                            </h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body d-flex align-items-end">
+                                <div class="row g-3 justify-content-between">
+
+                                    <div class="{% if recruitmentSession.getBookingForInterview == false %} col-auto  {% endif %}">
+                                        {% if recruitmentSession.getBookingForInterview == true %}
+                                        <div class="row"> {% endif %}
+                                            <button class="  btn btn-success w-100 fs--1 {% if recruitmentSession.getBookingForInterview == true %} m-2 col-sm  {% endif %}"
+                                                    type="button" data-bs-target="#individualInterview"
+                                                    data-bs-toggle="modal">Interview details
+                                            </button>
+                                            {% if recruitmentSession.getBookingForInterview == true %}
+                                                <a href="{{ path('app_individual_interview_booking') }}"
+                                                   class=" col-sm btn btn-success w-100 fs--1 m-2 {% if calendarState =='cannotAccessCalendar' %} disabled  {% endif %}"
+                                                   type="button">Book your Interview
+                                                </a>
+                                            {% endif %}
+                                            {% if recruitmentSession.getBookingForInterview == true %}</div> {% endif %}
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% if recruitmentSession.trialPeriod %}
+                        <div class="col-xxl-3 col-md-6">
+                            <div class="card {% if state !='testPeriodStart' %}  disabled-custom opacity-50 {% endif %} h-100">
+                                <div class="card-header pb-0">
+                                    <div class="row">
+                                        <div class="col">
+                                            <p class="mb-1 fs--2 {% if user.Result %}{% if (user.Result.getTrialPeriod == true)and (user.Result.isTrialPeriodEmail) %}text-success{% else %}text-500{% endif %}{% else %}text-500{% endif %}">  {% if user.Result %}{% if (user.Result.getTrialPeriod == true)and (user.Result.isTrialPeriodEmail) %}Passed{% else %}Pending{% endif %}{% else %}Pending{% endif %}</p>
+                                            <h5 class="text-primary fs-0">Trial period</h5>
+                                        </div>
+                                        <div class="col-auto">
+                                            <div class="bg-soft-primary px-3 py-3 rounded-circle text-center"
+                                                 style="width:60px;height:60px;">
+                                                <h5 class="text-primary mb-0 d-flex flex-column mt-n1">
+                                                    <span>{{ recruitmentSession.getTrialPeriodSelectionEnd | date("d") }}</span><small
+                                                            class="text-primary fs--2 lh-1">{{ recruitmentSession.getTrialPeriodSelectionEnd | date("M") }}</small>
+
+                                                </h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body d-flex align-items-end">
+                                    <div class="row g-3 justify-content-between">
+
+                                        <div class="col-auto">
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="kanban-modal-label-1"
+                 aria-hidden="true" id="collectiveInterview">
+                <div class="modal-dialog mt-6" role="document">
+                    <div class="modal-content border-0">
+                        <div class="position-absolute top-0 end-0 mt-2 me-2 z-index-1">
+                            <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base"
+                                    data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body text-center p-0">
+                            <div class="p-4 pb-0">
+                                <div class="row">
+                                    <div class="col">
+                                        <h5 class="mb-3">Collective Interview Details</h5>
+                                        <p class="text-word-break fs--1">
+                                            {% if user.getCollectiveInterview %}
+                                                <strong>Date & Time
+                                                    : </strong> {{ user.getCollectiveInterview.getStart | date("l F d Y H:i") }}
+                                                <br>
+                                                <strong>Place : </strong> {{ user.getCollectiveInterview.getPlace }}
+                                            {% else %}
+                                                You will find your interview details soon.
+                                            {% endif %}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="kanban-modal-label-1"
+                 aria-hidden="true" id="individualInterview">
+                <div class="modal-dialog mt-6" role="document">
+                    <div class="modal-content border-0">
+                        <div class="position-absolute top-0 end-0 mt-2 me-2 z-index-1">
+                            <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base"
+                                    data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body text-center p-0">
+                            <div class="p-4 pb-0">
+                                <div class="row">
+                                    <div class="col">
+                                        <h5 class="mb-3">individual Interview Details</h5>
+                                        <p class="text-word-break fs--1">
+                                            {% if user.getInterview %}
+                                                <strong>Date & Time
+                                                    : </strong> {{ user.getInterview.getStart | date("l F d Y H:i") }}
+                                                <br>
+                                                <strong>Place : </strong> {{ user.getInterview.getPlace }}
+                                            {% else %}
+                                                You will find your interview details soon.
+                                            {% endif %}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

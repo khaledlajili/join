@@ -1,0 +1,30 @@
+<script>
+    window.Interviews = []
+    {% for Interview in Interviews %}
+    var _recruiters = []
+    {% for recruiter in Interview.recruiters %}
+    _recruiters.push('{{ recruiter.fName }}')
+    {% endfor %}
+    {% if Interview.id in availibilities|keys %}
+        {% if availibilities[Interview.id] == true %}
+            var classe='bg-soft-success'
+        {% elseif availibilities[Interview.id] == false %}
+            var classe='bg-soft-danger'
+        {% endif %}
+    {% else %}
+        var classe='bg-soft-info'
+    {% endif %}
+    
+    var Interview = {
+        id: '{{ Interview.id }}',
+        title: '[#{{ Interview.id }}]',
+        place: '{{ Interview.place }}',
+        start: '{{ Interview.start|date("Y-m-d H:i") }}',
+        end: '{{ Interview.end|date("Y-m-d H:i") }}',
+        className: classe,
+        recruiters: _recruiters
+    }
+    window.Interviews.push(Interview)
+
+    {% endfor %}
+</script>

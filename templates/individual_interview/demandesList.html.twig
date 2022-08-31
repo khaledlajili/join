@@ -1,0 +1,105 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cancellation demands{% endblock %}
+
+{% block stylesheets %}
+    {{ encore_entry_link_tags('demands') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('demands') }}
+{% endblock %}
+
+
+{% block body %}
+    <main class="main" id="top">
+        <div class="container" data-layout="container">
+
+            {{ include('_sidebar.html.twig') }}
+            <div class="content">
+                {{ include('_navbar.html.twig') }}
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <div class="row flex-between-end">
+                            <div class="col-auto align-self-center">
+                                <h5 class="mb-0" data-anchor="data-anchor"> Cancellation demands</h5>
+                            </div>
+                            <div class="col-auto ms-auto">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body bg-light">
+                        <div class="table-responsive scrollbar">
+                            <table class="table table-sm table-striped fs--1 mb-0 overflow-hidden">
+                                <thead class="bg-200 text-900">
+                                <th></th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Interview Date</th>
+                                <th scope="col">Object</th>
+                                <th scope="col">Content</th>
+                                <th scope="col"></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for demande in demandes %}
+                                    <tr class="align-middle">
+                                        <td>
+                                            <div class="avatar avatar-xl">
+                                                <img class="rounded-circle" src="{{ asset(demande.sender.imgPath) }}"
+                                                     alt=""/>
+                                            </div>
+                                        </td>
+                                        <td class="text-nowrap" data-bs-target="#result-modal">
+                                            <div class="d-flex align-items-center">
+                                                <div class="ms-2">{{ demande.sender.FName }} {{ demande.sender.LName }}</div>
+                                            </div>
+                                        </td>
+
+                                        <td class="text-nowrap">{% if demande.interview %}{{ demande.Interview.start|date("Y M d") }}{% else %}canceled{% endif %}</td>
+                                        <td class="text-nowrap "> {% if demande.Object %} {{ demande.Object }} {% else %} - {% endif %}</td>
+                                        <td class=" "
+                                            id="{{ demande.Id }}">{% if demande.Content %} {{ demande.Content }} {% else %} - {% endif %} </td>
+                                        {% if (demande.IsAnotherInterview == true) and (demande.sender.Interview is null) %}
+                                            <td class="result">
+                                                <button class="btn btn-sm  btn-info btn-sm "
+                                                        id="{{ demande.Sender.Id }}" type="button"
+                                                        data-bs-target="#changeInterview" data-bs-toggle="modal">Change
+                                                    interview
+                                                </button>
+                                            </td>
+                                        {% endif %}
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="kanban-modal-label-1"
+                             aria-hidden="true" id="changeInterview">
+                            <div class="modal-dialog mt-6" role="document">
+                                <div class="modal-content border-0">
+                                    <div class="position-absolute top-0 end-0 mt-2 me-2 z-index-1">
+                                        <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base"
+                                                data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body text-center p-0">
+                                        <div class="p-4 ">
+                                            <div class="row">
+                                                <h5 class="mb-3">Choose another interview</h5>
+                                                <div class="changeInterviewFormContainer">
+                                                    <div class="justify-self-center spinner-border loading"
+                                                         role="status">
+                                                        <span class="visually-hidden">Loading...</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

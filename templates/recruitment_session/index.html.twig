@@ -1,0 +1,472 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Recruitment Session{% endblock %}
+
+{% block stylesheets %}
+    {{ encore_entry_link_tags('recruitmentSession') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('recruitmentSession') }}
+{% endblock %}
+
+
+{% block body %}
+    <main class="main" id="top">
+        <div class="container" data-layout="container">
+
+            {{ include('_sidebar.html.twig') }}
+
+            <div class="content">
+
+                {{ include('_navbar.html.twig') }}
+                {{ form_start(recruitmentSessionForm) }}
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h5 class="mb-2 mb-md-0">Recruitment Session</h5>
+                            </div>
+                            <div>
+                                {% if ((currentRecruitmentSession is not null) and ((currentRecruitmentSession.trialPeriod and (currentRecruitmentSession.trialPeriodSelectionEnd < date())) or ((not currentRecruitmentSession.trialPeriod) and (currentRecruitmentSession.interviewsSelectionEnd < date())))) %}
+                                    <a href="{{ path('app_recruitment_session_close') }}"
+                                       class="btn btn-sm  btn-falcon-danger btn-sm float-end m-1 ">Close</a>
+                                {% else %}
+                                    {{ form_row(recruitmentSessionForm.submit) }}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {% for flash_error in app.flashes('error') %}
+                    <div class="alert p-2 alert-danger" role="alert">{{ flash_error }}</div>
+                {% endfor %}
+
+                <div class="row g-0">
+                    <div class="col-lg-8 pe-lg-2">
+                        <div class="card mb-3">
+                            <div class="card-header">
+
+                                <h5 class="mb-0">Recruitment session details</h5>
+                            </div>
+                            <div class="card-body bg-light">
+                                <div class="row gx-2">
+                                    <div class="col-6 mb-3">
+                                        {{ form_row(recruitmentSessionForm.name) }}
+                                    </div>
+                                    {% if recruitmentSession.start is null %}
+                                        <div class="col-6 mb-3">
+                                            {{ form_row(recruitmentSessionForm.depChoiceMaxNbre) }}
+                                        </div>
+                                    {% endif %}
+                                    {% if recruitmentSessionForm.registrationEnd is defined %}
+                                        <div class="col-sm-6 mb-3">
+                                            {{ form_row(recruitmentSessionForm.registrationEnd) }}
+                                        </div>
+                                    {% endif %}
+                                    {% if recruitmentSessionForm.preRegistrationSelectionEnd is defined %}
+                                        <div class="col-sm-6">
+                                            {{ form_row(recruitmentSessionForm.preRegistrationSelectionEnd) }}
+                                        </div>
+                                    {% endif %}
+                                    {% if recruitmentSessionForm.interviewsScheduleEnd is defined %}
+                                        <div class="col-sm-6">
+                                            {{ form_row(recruitmentSessionForm.interviewsScheduleEnd) }}
+                                        </div>
+                                    {% endif %}
+                                    {% if recruitmentSessionForm.recruitersAvailabilityEnd is defined %}
+                                        <div class="col-sm-6">
+                                            {{ form_row(recruitmentSessionForm.recruitersAvailabilityEnd) }}
+                                        </div>
+                                    {% endif %}
+                                    {% if recruitmentSessionForm.validateInterviewsScheduleEnd is defined %}
+                                        <div class="col-sm-6">
+                                            {{ form_row(recruitmentSessionForm.validateInterviewsScheduleEnd) }}
+                                        </div>
+                                    {% endif %}
+                                    {% if recruitmentSessionForm.interviewsStart is defined %}
+                                        <div class="col-sm-6">
+                                            {{ form_row(recruitmentSessionForm.interviewsStart) }}
+                                        </div>
+                                    {% endif %}
+                                    {% if recruitmentSessionForm.interviewsEnd is defined %}
+                                        <div class="col-sm-6">
+                                            {{ form_row(recruitmentSessionForm.interviewsEnd) }}
+
+                                        </div>
+                                    {% endif %}
+                                    {% if recruitmentSessionForm.interviewsSelectionEnd is defined %}
+                                        <div class="col-sm-6">
+                                            {{ form_row(recruitmentSessionForm.interviewsSelectionEnd) }}
+                                        </div>
+                                    {% endif %}
+
+
+                                </div>
+
+
+                            </div>
+                        </div>
+                        {% if ( recruitmentSession.collectiveInterview ) or ( recruitmentSession.start is null ) %}
+                            <div class="card mb-3">
+
+                                <div class="card-header ">
+                                    <div class="row">
+                                        <div class="col-11">
+                                            <h5 class="mb-0">collective interviews</h5>
+                                        </div>
+                                        {% if recruitmentSessionForm.collectiveInterview is defined %}
+                                            <div class="col-1">
+                                                {{ form_row(recruitmentSessionForm.collectiveInterview) }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="card-body bg-light {% if not recruitmentSession.collectiveInterview %} d-none {% endif %}"
+                                     id="collectiveInterviewForm">
+                                    <div class="row gx-2">
+                                        {% if recruitmentSessionForm.collectiveInterviewsEnd is defined %}
+                                            <div class="col-sm-6 mb-3">
+                                                {{ form_row(recruitmentSessionForm.collectiveInterviewsEnd) }}
+                                            </div>
+                                        {% endif %}
+                                        {% if recruitmentSessionForm.collectiveInterviewsSelectionEnd is defined %}
+                                            <div class="col-sm-6 mb-3">
+                                                {{ form_row(recruitmentSessionForm.collectiveInterviewsSelectionEnd) }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% if ( recruitmentSession.technicalTest ) or ( recruitmentSession.start is null ) %}
+                            <div class="card mb-3">
+                                <div class="card-header ">
+                                    <div class="row">
+                                        <div class="col-11">
+                                            <h5 class="mb-0">Technical test</h5>
+                                        </div>
+                                        {% if recruitmentSessionForm.technicalTest is defined %}
+                                            <div class="col-1">
+                                                {{ form_row(recruitmentSessionForm.technicalTest) }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    {% for flash in app.flashes('error') %}
+                                        <div class="alert alert-danger">{{ flash }}</div>
+                                        <hr>
+                                    {% endfor %}
+                                </div>
+
+                                <div class="card-body bg-light {% if not recruitmentSession.technicalTest %} d-none {% endif %}"
+                                     id="technicalTestForm">
+                                    <div class="row gx-2">
+                                        {% if recruitmentSessionForm.technicalTestEnd is defined %}
+                                            <div class="col-sm-6 mb-3">
+                                                {{ form_row(recruitmentSessionForm.technicalTestEnd) }}
+                                            </div>
+                                        {% endif %}
+                                        {% if recruitmentSessionForm.technicalTestSelectionEnd is defined %}
+                                            <div class="col-sm-6 mb-3">
+                                                {{ form_row(recruitmentSessionForm.technicalTestSelectionEnd) }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% if recruitmentSession.bookingForInterview  or ( recruitmentSession.start is null ) %}
+                            <div class="card mb-3">
+
+                                <div class="card-header ">
+                                    <div class="row">
+                                        <div class="col-11">
+                                            <h5 class="mb-0">Booking for individual interviews</h5>
+                                        </div>
+                                        {% if recruitmentSessionForm.bookingForInterview is defined %}
+                                            <div class="col-1">
+                                                {{ form_row(recruitmentSessionForm.bookingForInterview) }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="card-body bg-light {% if not recruitmentSession.bookingForInterview %} d-none {% endif %}"
+                                     id="bookingForInterviewForm">
+                                    <div class="row gx-2">
+                                        {% if recruitmentSessionForm.forBookingInterviewsScheduleEnd is defined %}
+                                            <div class="col-sm-12 mb-3">
+                                                {{ form_row(recruitmentSessionForm.forBookingInterviewsScheduleEnd) }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% if recruitmentSession.trialPeriod  or ( recruitmentSession.start is null ) %}
+                            <div class="card mb-3">
+                                <div class="card-header ">
+                                    <div class="row">
+                                        <div class="col-11">
+                                            <h5 class="mb-0">Trial period</h5>
+                                        </div>
+                                        {% if recruitmentSessionForm.trialPeriod is defined %}
+                                            <div class="col-1">
+                                                {{ form_row(recruitmentSessionForm.trialPeriod) }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="card-body bg-light {% if not recruitmentSession.trialPeriod %} d-none {% endif %}"
+                                     id="trialPeriodForm">
+                                    <div class="row gx-2">
+                                        {% if recruitmentSessionForm.trialPeriodSelectionEnd is defined %}
+                                            <div class="col-sm-12 mb-3">
+                                                {{ form_row(recruitmentSessionForm.trialPeriodSelectionEnd) }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="col-lg-4 ps-lg-2">
+                        <div class="sticky-sidebar">
+                            {% if currentRecruitmentSession %}
+                                {% if recruitmentSession.start is null %}
+                                    <div class="mb-3">
+                                        <div class="card mb-lg-0">
+                                            <div class="card-header">
+                                                <div class="row flex-between-center">
+                                                    <div class="col-4 col-sm-auto d-flex align-items-center pe-0">
+                                                        <h5 class="fs-0 mb-0 text-nowrap py-2 py-xl-0">Pré-registration
+                                                            Form</h5>
+                                                    </div>
+                                                    <div class="col-8 col-sm-auto ms-auto text-end ps-0">
+                                                        <div id="orders-actions">
+                                                            <a class="btn btn-falcon-default btn-sm"
+                                                               href="{{ path('app_pre_registration') }}"><span
+                                                                        class="fas fa-edit"
+                                                                        data-fa-transform="shrink-3 down-2"></span><span
+                                                                        class="d-none d-sm-inline-block ms-1">Edit</span></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                {% if currentRecruitmentSession.collectiveInterview and (currentRecruitmentSession.preRegistrationSelectionEnd > date()) %}
+                                    <div class="mb-3">
+                                        <div class="card mb-lg-0">
+                                            <div class="card-header">
+                                                <div class="row flex-between-center">
+                                                    <div class="col-4 col-sm-auto d-flex align-items-center pe-0">
+                                                        <h5 class="fs-0 mb-0 text-nowrap py-2 py-xl-0">Collective
+                                                            interviews evaluation grid</h5>
+                                                    </div>
+                                                    <div class="col-8 col-sm-auto ms-auto text-end ps-0">
+                                                        <div id="orders-actions">
+                                                            <a class="btn btn-falcon-default btn-sm"
+                                                               href="{{ path('app_collective_interview_evaluation_grid') }}"><span
+                                                                        class="fas fa-edit"
+                                                                        data-fa-transform="shrink-3 down-2"></span><span
+                                                                        class="d-none d-sm-inline-block ms-1">Edit</span></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                {% if currentRecruitmentSession.technicalTest and (currentRecruitmentSession.collectiveInterviewsSelectionEnd > date()) %}
+                                    <div class="mb-3">
+                                        <div class="card mb-lg-0">
+                                            <div class="card-header">
+                                                <div class="row flex-between-center">
+                                                    <div class="col-4 col-sm-auto d-flex align-items-center pe-0">
+                                                        <h5 class="fs-0 mb-0 text-nowrap py-2 py-xl-0">Technical
+                                                            tests</h5>
+                                                    </div>
+                                                    <div class="col-8 col-sm-auto ms-auto text-end ps-0">
+                                                        <div id="orders-actions">
+                                                            <a class="btn btn-falcon-default btn-sm"
+                                                               href="{{ path('app_technical_test_add') }}"><span
+                                                                        class="fas fa-edit"
+                                                                        data-fa-transform="shrink-3 down-2"></span><span
+                                                                        class="d-none d-sm-inline-block ms-1">Edit</span></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                {% if date(recruitmentSession.interviewsStart) > date() %}
+                                    <div class="mb-3">
+                                        <div class="card mb-lg-0">
+                                            <div class="card-header">
+                                                <div class="row flex-between-center">
+                                                    <div class="col-4 col-sm-auto d-flex align-items-center pe-0">
+                                                        <h5 class="fs-0 mb-0 text-nowrap py-2 py-xl-0">Individual
+                                                            interviews
+                                                            evaluation grid</h5>
+                                                    </div>
+                                                    <div class="col-8 col-sm-auto ms-auto text-end ps-0">
+                                                        <div id="orders-actions">
+                                                            <a class="btn btn-falcon-default btn-sm"
+                                                               href="{{ path('app_interview_evaluation_grid') }}"><span
+                                                                        class="fas fa-edit"
+                                                                        data-fa-transform="shrink-3 down-2"></span><span
+                                                                        class="d-none d-sm-inline-block ms-1">Edit</span></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endif %}
+                            {% if recruitmentSession.start is null %}
+                                <div class="mb-3">
+                                    <div class="card mb-lg-0">
+                                        <div class="card-header">
+                                            <div class="row flex-between-center">
+                                                <div class="col-4 col-sm-auto d-flex align-items-center pe-0">
+                                                    <h5 class="fs-0 mb-0 text-nowrap py-2 py-xl-0">Departments</h5>
+                                                </div>
+                                                <div class="col-8 col-sm-auto ms-auto text-end ps-0">
+                                                    <div id="orders-actions">
+                                                        <button class="btn btn-falcon-default btn-sm" type="button"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#addDepartmentModal"><span
+                                                                    class="fas fa-plus"
+                                                                    data-fa-transform="shrink-3 down-2"></span><span
+                                                                    class="d-none d-sm-inline-block ms-1">New</span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-body bg-light">
+                                            <div class="table-responsive scrollbar">
+                                                <table class="table table-sm table-striped fs--1 mb-0 overflow-hidden">
+                                                    <thead class="bg-200 text-900">
+                                                    <tr>
+                                                        <th class="sort pe-1 align-middle white-space-nowrap">Department
+                                                        </th>
+                                                        <th class="no-sort"></th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody class="list" id="table-departments-body">
+                                                    {% for department in departments %}
+                                                        {{ include('recruitment_session/_department_row.html.twig') }}
+                                                    {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <div class="card mb-lg-0">
+                                        <div class="card-header">
+                                            <div class="row flex-between-center">
+                                                <div class="col-4 col-sm-auto d-flex align-items-center pe-0">
+                                                    <h5 class="fs-0 mb-0 text-nowrap py-2 py-xl-0">Study levels</h5>
+                                                </div>
+                                                <div class="col-8 col-sm-auto ms-auto text-end ps-0">
+                                                    <div id="orders-actions">
+                                                        <button class="btn btn-falcon-default btn-sm" type="button"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#addStudyLevelModal"><span
+                                                                    class="fas fa-plus"
+                                                                    data-fa-transform="shrink-3 down-2"></span><span
+                                                                    class="d-none d-sm-inline-block ms-1">New</span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-body bg-light">
+                                            <div class="table-responsive scrollbar">
+                                                <table class="table table-sm table-striped fs--1 mb-0 overflow-hidden">
+                                                    <thead class="bg-200 text-900">
+                                                    <tr>
+                                                        <th class="sort pe-1 align-middle white-space-nowrap">Study
+                                                            level
+                                                        </th>
+                                                        <th class="no-sort"></th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody class="list" id="table-study-levels-body">
+                                                    {% for studyLevel in studyLevels %}
+                                                        {{ include('recruitment_session/_study_level_row.html.twig') }}
+                                                    {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {{ form_row(recruitmentSessionForm._token) }}
+                {{ form_end(recruitmentSessionForm, {'render_rest': false}) }}
+
+                {% if ( preRegistrationFormFieldsNbr > 0 ) and ( recruitmentSession.start is null ) %}
+                    <div class="card mt-3">
+                        <div class="card-body">
+                            <div class="row justify-content-between align-items-center">
+                                <div class="col-md">
+                                    <h5 class="mb-2 mb-md-0">Please make sure all settings are correct before starting
+                                        the session.</h5>
+                                    You must save before starting the session.
+                                </div>
+                                <div class="col-auto">
+                                    {{ form(startSessionForm) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
+            </div>
+
+            <div class="modal fade" id="addDepartmentModal" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content border">
+                        <div class="modal-header px-card bg-light border-bottom-0">
+                            <h5 class="modal-title">Add department</h5>
+                            <button class="btn-close me-n1" type="button" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body p-card addDepartmentModelBody">
+                            {{ include('recruitment_session/_department_form.html.twig') }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="addStudyLevelModal" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content border">
+                        <div class="modal-header px-card bg-light border-bottom-0">
+                            <h5 class="modal-title">Add study level</h5>
+                            <button class="btn-close me-n1" type="button" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body p-card addStudyLevelModelBody">
+                            {{ include('recruitment_session/_study_level_form.html.twig') }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+{% endblock %}
