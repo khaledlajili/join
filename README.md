@@ -15,7 +15,7 @@
 
 <hr>
 
-## Instalation
+## Instalation 
 
 ### Prerequisites
 
